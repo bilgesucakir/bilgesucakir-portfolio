@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bilgesu Çakır — iPod</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum-deep:#887caf;--plum-mid:#9688c0;--wisteria:#a596d3;--wisteria-lt:#b6a5e8;
+    --mauve:#c8b6ff;--periwinkle:#cdbdff;
+    --ink:#2c2640;--ink-soft:#5b5478;--paper:#faf8ff;--paper-dim:#f3effc;
+    --serif:'Fraunces',serif;--sans:'Sora',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.65;min-height:100vh}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  a{color:var(--plum-deep)}
+  button:focus-visible{outline:2px solid var(--plum-deep);outline-offset:3px}
+
+  .ambient{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+  .blob{position:absolute;border-radius:50%;filter:blur(90px)}
+  .b1{width:520px;height:520px;background:var(--mauve);top:-200px;left:-180px;opacity:.22}
+  .b2{width:420px;height:420px;background:var(--wisteria-lt);bottom:-200px;right:-160px;opacity:.18}
+
+  .stage{display:grid;grid-template-columns:300px 1fr;gap:clamp(32px,6vw,80px);
+    max-width:1080px;margin:0 auto;padding:clamp(32px,6vw,72px) clamp(20px,5vw,48px);align-items:start}
+  @media(max-width:860px){.stage{grid-template-columns:1fr;gap:36px}}
+
+  /* ---- iPod ---- */
+  .ipod{position:sticky;top:48px;width:284px;justify-self:center;
+    background:linear-gradient(160deg,#fdfbff,#ece5fb);border-radius:32px;padding:20px 20px 26px;
+    box-shadow:0 22px 50px rgba(44,38,64,.22),inset 0 1px 0 #fff;border:1px solid rgba(136,124,175,.25)}
+  @media(max-width:860px){.ipod{position:static}}
+  .screen{background:#f7f4ff;border-radius:8px;height:212px;padding:0;overflow:hidden;
+    border:1px solid rgba(136,124,175,.35);box-shadow:inset 0 2px 8px rgba(44,38,64,.12);display:flex;flex-direction:column}
+  .screen-bar{height:22px;flex:0 0 22px;background:linear-gradient(180deg,#e7dffb,#d9cff5);
+    display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:.62rem;color:var(--ink-soft)}
+  .menu{flex:1;overflow:hidden;padding:4px 0}
+  .menu li{list-style:none;padding:6px 12px;font-size:.8rem;display:flex;justify-content:space-between;
+    color:var(--ink);transition:background .15s,color .15s}
+  .menu ul{margin:0;padding:0}
+  .menu li.sel{background:linear-gradient(180deg,var(--wisteria-lt),var(--plum-mid));color:#fff}
+  .menu li .arrow{opacity:.5;font-size:.7rem}
+  .menu li.sel .arrow{opacity:.9}
+
+  .wheel{width:180px;height:180px;border-radius:50%;margin:24px auto 0;position:relative;
+    background:radial-gradient(circle at 50% 35%,#fbf9ff,#e6ddf8);
+    box-shadow:0 3px 10px rgba(44,38,64,.16),inset 0 1px 0 #fff;border:1px solid rgba(136,124,175,.22)}
+  .wheel button{position:absolute;background:none;border:none;cursor:pointer;color:var(--ink-soft);
+    font-size:.68rem;letter-spacing:.06em;padding:8px 12px;border-radius:10px;transition:color .2s,background .2s}
+  .wheel button:hover{color:var(--plum-deep);background:rgba(200,182,255,.28)}
+  .w-menu{top:6px;left:50%;transform:translateX(-50%)}
+  .w-prev{left:2px;top:50%;transform:translateY(-50%);font-size:.95rem!important}
+  .w-next{right:2px;top:50%;transform:translateY(-50%);font-size:.95rem!important}
+  .w-play{bottom:4px;left:50%;transform:translateX(-50%);font-size:.95rem!important}
+  .center{position:absolute;inset:56px;border-radius:50%;background:linear-gradient(160deg,#f6f2ff,#ded3f6);
+    border:none;cursor:pointer;box-shadow:inset 0 1px 3px rgba(44,38,64,.16);transition:transform .15s}
+  .center:hover{transform:scale(1.04)}
+  .ipod-label{text-align:center;font-size:.7rem;color:var(--ink-soft);margin-top:16px}
+
+  /* ---- content panel ---- */
+  .panel{min-height:60vh}
+  .panel-head{margin-bottom:26px}
+  .kicker{font-size:.78rem;color:var(--plum-deep);margin:0 0 6px}
+  .panel h1{font-family:var(--serif);font-weight:500;font-size:clamp(1.9rem,4.4vw,2.7rem);margin:0;line-height:1.12}
+  .panel h2{font-family:var(--serif);font-weight:500;font-size:1.08rem;margin:22px 0 2px}
+  .panel h2:first-of-type{margin-top:0}
+  .panel p{color:var(--ink-soft);max-width:58ch;margin:8px 0 0;font-size:.97rem}
+  .panel .meta{font-size:.83rem;color:var(--plum-deep);margin-top:2px}
+  .panel ul.bullets{margin:10px 0 0;padding-left:1.1em;color:var(--ink-soft);font-size:.95rem}
+  .panel ul.bullets li{margin-bottom:5px}
+  .rule{height:1px;background:rgba(136,124,175,.2);margin:22px 0}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+  .chip{font-size:.84rem;padding:6px 15px;border-radius:999px;background:var(--paper-dim);
+    border:1px solid rgba(136,124,175,.28);transition:background .25s,transform .25s}
+  .chip:hover{background:var(--mauve);transform:translateY(-2px)}
+  .view{display:none;animation:fadein .45s cubic-bezier(.22,.61,.36,1)}
+  .view.on{display:block}
+  @keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .links{display:flex;gap:16px;flex-wrap:wrap;margin-top:16px;font-size:.9rem}
+  .links a{padding:6px 15px;border-radius:999px;border:1px solid rgba(136,124,175,.4);text-decoration:none;color:var(--ink);transition:background .25s}
+  .links a:hover{background:var(--mauve)}
+</style>
+</head>
+<body>
+<div class="ambient"><div class="blob b1"></div><div class="blob b2"></div></div>
+
+<div class="stage">
+  <!-- iPOD -->
+  <div class="ipod">
+    <div class="screen">
+      <div class="screen-bar"><span id="nowTitle">Bilgesu Çakır</span><span>♪</span></div>
+      <div class="menu"><ul id="menuList"></ul></div>
+    </div>
+    <div class="wheel">
+      <button class="w-menu" id="btnMenu">MENU</button>
+      <button class="w-prev" id="btnPrev" aria-label="Previous">◀◀</button>
+      <button class="w-next" id="btnNext" aria-label="Next">▶▶</button>
+      <button class="w-play" id="btnPlay" aria-label="Select">▶‖</button>
+      <button class="center" id="btnCenter" aria-label="Select"></button>
+    </div>
+    <p class="ipod-label">Use ◀◀ ▶▶ to browse, centre to select</p>
+  </div>
+
+  <!-- PANEL -->
+  <div class="panel" id="panel">
+
+    <div class="view on" data-view="about">
+      <div class="panel-head"><p class="kicker">Istanbul, Turkey</p><h1>Bilgesu Çakır</h1></div>
+      <p>Software Development Engineer. I build backend systems by day — currently at Hepsiburada, previously on Amadeus's Order Management System — and spend my off hours shipping small side projects, crocheting, and hunting down the next film to watch.</p>
+      <div class="links">
+        <a href="mailto:your-email@example.com">Email</a>
+        <a href="https://github.com/bilgesucakir" target="_blank" rel="noopener">GitHub</a>
+        <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://letterboxd.com/bilgesucakir" target="_blank" rel="noopener">Letterboxd</a>
+      </div>
+    </div>
+
+    <div class="view" data-view="education">
+      <div class="panel-head"><p class="kicker">Education</p><h1>Where it started</h1></div>
+      <h2>B.S. Computer Science &amp; Engineering</h2>
+      <p class="meta">Sabancı University · Graduated June 2023</p>
+    </div>
+
+    <div class="view" data-view="experience">
+      <div class="panel-head"><p class="kicker">Experience</p><h1>Where I've worked</h1></div>
+      <h2>Software Development Engineer</h2>
+      <p class="meta">Hepsiburada · Current</p>
+      <p>Details to add.</p>
+      <div class="rule"></div>
+      <h2>Associate Software Development Engineer</h2>
+      <p class="meta">Amadeus, Istanbul · Jul 2025 – Jun 2026</p>
+      <p>Promoted from Junior after a year and a half on the same team.</p>
+      <div class="rule"></div>
+      <h2>Junior Software Development Engineer</h2>
+      <p class="meta">Amadeus, Istanbul · Feb 2024 – Jun 2025</p>
+      <ul class="bullets">
+        <li>Order Management System — moving ticket/PNR flows onto the IATA Order standard</li>
+        <li>Cloud-based Java services with Quarkus, running on Kubernetes</li>
+        <li>1st place, internal Amadeus bug bounty — security and privacy testing on a live system</li>
+        <li>2nd place, Amadeus Community Impact Hackathon 2024 with AYDER — accessibility app, Flutter + Java</li>
+      </ul>
+    </div>
+
+    <div class="view" data-view="capstone">
+      <div class="panel-head"><p class="kicker">Graduation project</p><h1>Senior capstone</h1></div>
+      <h2>Project title goes here</h2>
+      <p class="meta">Sabancı University · 2022–2023</p>
+      <p>A short description of the problem, what you built, and how it turned out.</p>
+      <div class="chips"><span class="chip">Tech 1</span><span class="chip">Tech 2</span><span class="chip">Tech 3</span></div>
+    </div>
+
+    <div class="view" data-view="projects">
+      <div class="panel-head"><p class="kicker">Side projects</p><h1>What I build for fun</h1></div>
+      <h2>What We'll Watch Tonight</h2>
+      <p class="meta">Spring Boot · Vue · Render — shipped</p>
+      <p>Compares 2–4 people's Letterboxd watchlists and returns the films everyone already wants to see, linking straight back to each film's page. <a href="https://what-we-will-watch-tonight.onrender.com" target="_blank" rel="noopener">Live</a> · <a href="https://github.com/bilgesucakir/what-we-will-watch-tonight" target="_blank" rel="noopener">Code</a></p>
+      <div class="rule"></div>
+      <h2>veni vidi ami</h2>
+      <p class="meta">Spring Boot · Vue · Leaflet — early stage</p>
+      <p>Map-based aggregator pulling secondhand listings from Sahibinden, Dolap and others, plotted by area.</p>
+      <div class="rule"></div>
+      <h2>account-singularity</h2>
+      <p class="meta">TypeScript extension · Python vault — in progress</p>
+      <p>One master identity for signing up everywhere else, backed by a local encrypted vault.</p>
+      <div class="rule"></div>
+      <h2>Jetlag planner</h2>
+      <p class="meta">Concept stage</p>
+      <p>Reads flight details from your calendar and builds a sleep, rest and meal-timing plan around the trip.</p>
+      <div class="rule"></div>
+      <h2>Interview prep repo</h2>
+      <p class="meta">Idea stage</p>
+      <p>Interactive demos of core CS concepts plus notes on online coding platforms.</p>
+    </div>
+
+    <div class="view" data-view="tools">
+      <div class="panel-head"><p class="kicker">Tools</p><h1>What I build with</h1></div>
+      <div class="chips">
+        <span class="chip">Java</span><span class="chip">Python</span><span class="chip">Quarkus</span><span class="chip">Spring Boot</span><span class="chip">Kubernetes</span><span class="chip">Vue.js</span><span class="chip">Angular</span><span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">TypeScript</span>
+      </div>
+    </div>
+
+    <div class="view" data-view="hobbies">
+      <div class="panel-head"><p class="kicker">Off the clock</p><h1>Outside of code</h1></div>
+      <h2>Crochet</h2>
+      <p>Working through a growing pile of yarn, one project at a time — documented (slowly) on Instagram as <em>a crocheter's diary</em>.</p>
+      <div class="rule"></div>
+      <h2>Film</h2>
+      <p>A running Letterboxd watchlist, which is what started the What We'll Watch Tonight project.</p>
+      <div class="rule"></div>
+      <h2>Music</h2>
+      <p>Always something playing in the background — details coming soon.</p>
+    </div>
+
+    <div class="view" data-view="connect">
+      <div class="panel-head"><p class="kicker">Find me</p><h1>Elsewhere on the internet</h1></div>
+      <p><a href="https://github.com/bilgesucakir" target="_blank" rel="noopener">GitHub</a> — bilgesucakir</p>
+      <p><a href="https://letterboxd.com/bilgesucakir" target="_blank" rel="noopener">Letterboxd</a> — bilgesucakir</p>
+      <p><a href="#" target="_blank" rel="noopener">Instagram</a> — a crocheter's diary</p>
+      <p><a href="#" target="_blank" rel="noopener">LinkedIn</a> — /in/handle</p>
+      <p><a href="mailto:your-email@example.com">Email</a></p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const tracks=[
+    {id:'about',label:'About me'},
+    {id:'education',label:'Education'},
+    {id:'experience',label:'Experience'},
+    {id:'capstone',label:'Graduation project'},
+    {id:'projects',label:'Side projects'},
+    {id:'tools',label:'Tools'},
+    {id:'hobbies',label:'Off the clock'},
+    {id:'connect',label:'Find me'}
+  ];
+  let cursor=0, current=0;
+  const list=document.getElementById('menuList');
+  const nowTitle=document.getElementById('nowTitle');
+
+  function renderMenu(){
+    list.innerHTML=tracks.map((t,i)=>
+      `<li class="${i===cursor?'sel':''}">${t.label}<span class="arrow">›</span></li>`).join('');
+    // keep highlighted item visible in the small screen
+    const sel=list.querySelector('.sel');
+    if(sel) sel.scrollIntoView({block:'nearest'});
+  }
+  function select(i){
+    current=i;
+    document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.dataset.view===tracks[i].id));
+    nowTitle.textContent=tracks[i].label;
+  }
+  function move(d){
+    cursor=(cursor+d+tracks.length)%tracks.length;
+    renderMenu();
+  }
+  document.getElementById('btnNext').onclick=()=>move(1);
+  document.getElementById('btnPrev').onclick=()=>move(-1);
+  document.getElementById('btnCenter').onclick=()=>select(cursor);
+  document.getElementById('btnPlay').onclick=()=>select(cursor);
+  document.getElementById('btnMenu').onclick=()=>{cursor=0;renderMenu();select(0)};
+  document.querySelector('.menu').addEventListener('click',e=>{
+    const li=e.target.closest('li'); if(!li)return;
+    cursor=[...list.children].indexOf(li); renderMenu(); select(cursor);
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowDown'){e.preventDefault();move(1)}
+    if(e.key==='ArrowUp'){e.preventDefault();move(-1)}
+    if(e.key==='Enter'&&document.activeElement===document.body){select(cursor)}
+  });
+  renderMenu();select(0);
+</script>
+</body>
+</html>
