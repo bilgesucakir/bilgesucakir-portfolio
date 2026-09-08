@@ -1,19 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bilgesu Çakır — iPod</title>
+<title>Bilgesu Çakır Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --plum-deep:#887caf;--plum-mid:#9688c0;--wisteria:#a596d3;--wisteria-lt:#b6a5e8;
     --mauve:#c8b6ff;--periwinkle:#cdbdff;
-    --ink:#2c2640;--ink-soft:#5b5478;--paper:#faf8ff;--paper-dim:#f3effc;
+    --ink:#2c2640;--ink-soft:#5b5478;--paper:#e9e2f8;--paper-dim:#ded4f1;
+    --line:rgba(136,124,175,.28);--on-accent:#2c2640;--on-plum:#ffffff;--gh:#181717;
+    --thumb:rgba(136,124,175,.4);
+    /* device chrome keeps its own ink so the iPod stays readable in any theme */
+    --device-ink:#2c2640;--device-ink-soft:#5b5478;
     --serif:'Fraunces',serif;--sans:'Sora',system-ui,sans-serif;
   }
+  [data-theme="dark"]{
+    --plum-deep:#bdabee;
+    --ink:#ece8f8;--ink-soft:#a79dc4;--paper:#1e1a2c;--paper-dim:#2b2440;
+    --line:rgba(181,166,232,.24);--on-plum:#241f33;--gh:#ffffff;
+    --thumb:rgba(181,166,232,.3);
+  }
   *{box-sizing:border-box}
-  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.65;min-height:100vh}
+  html{overflow-y:scroll;scrollbar-gutter:stable}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.65;min-height:100vh;
+    transition:background .4s,color .4s}
+
+  /* scrollbars — track stays invisible */
+  html,.panel{scrollbar-width:thin;scrollbar-color:var(--thumb) transparent}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:var(--thumb);border-radius:99px}
+  ::-webkit-scrollbar-corner{background:transparent}
+  @media(min-width:861px){html,body{height:100%;overflow:hidden}}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   a{color:var(--plum-deep)}
   button:focus-visible{outline:2px solid var(--plum-deep);outline-offset:3px}
@@ -24,44 +44,57 @@
   .b2{width:420px;height:420px;background:var(--wisteria-lt);bottom:-200px;right:-160px;opacity:.18}
 
   .stage{display:grid;grid-template-columns:300px 1fr;gap:clamp(32px,6vw,80px);
-    max-width:1080px;margin:0 auto;padding:clamp(32px,6vw,72px) clamp(20px,5vw,48px);align-items:start}
-  @media(max-width:860px){.stage{grid-template-columns:1fr;gap:36px}}
+    max-width:1180px;margin:0 auto;padding:clamp(32px,6vw,72px) clamp(20px,5vw,48px);align-items:start;height:100vh}
+  @media(max-width:860px){.stage{grid-template-columns:1fr;gap:36px;height:auto}}
 
   /* ---- iPod ---- */
-  .ipod{position:sticky;top:48px;width:284px;justify-self:center;
-    background:linear-gradient(160deg,#fdfbff,#ece5fb);border-radius:32px;padding:20px 20px 26px;
-    box-shadow:0 22px 50px rgba(44,38,64,.22),inset 0 1px 0 #fff;border:1px solid rgba(136,124,175,.25)}
-  @media(max-width:860px){.ipod{position:static}}
+  .ipod{position:relative;width:284px;justify-self:center;
+    background:linear-gradient(160deg,#ffffff,#e6e6ec);border-radius:32px;padding:20px 20px 26px;
+    box-shadow:0 22px 50px rgba(44,38,64,.22),inset 0 1px 0 #fff;border:1px solid rgba(20,18,30,.1)}
   .screen{background:#f7f4ff;border-radius:8px;height:212px;padding:0;overflow:hidden;
-    border:1px solid rgba(136,124,175,.35);box-shadow:inset 0 2px 8px rgba(44,38,64,.12);display:flex;flex-direction:column}
-  .screen-bar{height:22px;flex:0 0 22px;background:linear-gradient(180deg,#e7dffb,#d9cff5);
-    display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:.62rem;color:var(--ink-soft)}
-  .menu{flex:1;overflow:hidden;padding:4px 0}
+    border:1px solid rgba(20,18,30,.18);box-shadow:inset 0 2px 8px rgba(44,38,64,.12);display:flex;flex-direction:column}
+  .screen-bar{height:22px;flex:0 0 22px;background:linear-gradient(180deg,#eceaf0,#dcdbe2);
+    display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:.62rem;color:var(--device-ink-soft)}
+  .battery{position:relative;width:20px;height:10px;border:1px solid var(--device-ink-soft);border-radius:2px;display:inline-block}
+  .battery::after{content:'';position:absolute;top:2.5px;right:-3px;width:2px;height:4px;background:var(--device-ink-soft);border-radius:0 1px 1px 0}
+  .battery-fill{position:absolute;top:1px;bottom:1px;left:1px;width:72%;background:var(--device-ink-soft);border-radius:1px}
+  .menu{flex:1;overflow:hidden;padding:0}
   .menu li{list-style:none;padding:6px 12px;font-size:.8rem;display:flex;justify-content:space-between;
-    color:var(--ink);transition:background .15s,color .15s}
+    color:var(--device-ink);transition:background .15s,color .15s}
   .menu ul{margin:0;padding:0}
   .menu li.sel{background:linear-gradient(180deg,var(--wisteria-lt),var(--plum-mid));color:#fff}
   .menu li .arrow{opacity:.5;font-size:.7rem}
   .menu li.sel .arrow{opacity:.9}
 
   .wheel{width:180px;height:180px;border-radius:50%;margin:24px auto 0;position:relative;
-    background:radial-gradient(circle at 50% 35%,#fbf9ff,#e6ddf8);
-    box-shadow:0 3px 10px rgba(44,38,64,.16),inset 0 1px 0 #fff;border:1px solid rgba(136,124,175,.22)}
-  .wheel button{position:absolute;background:none;border:none;cursor:pointer;color:var(--ink-soft);
+    background:radial-gradient(circle at 50% 35%,#ffffff,#dedde3);
+    box-shadow:0 3px 10px rgba(44,38,64,.16),inset 0 1px 0 #fff;border:1px solid rgba(20,18,30,.1)}
+  .wheel button{position:absolute;background:none;border:none;cursor:pointer;color:var(--device-ink-soft);
     font-size:.68rem;letter-spacing:.06em;padding:8px 12px;border-radius:10px;transition:color .2s,background .2s}
-  .wheel button:hover{color:var(--plum-deep);background:rgba(200,182,255,.28)}
+  .wheel button:hover{color:var(--device-ink);background:rgba(20,18,30,.06)}
   .w-menu{top:6px;left:50%;transform:translateX(-50%)}
   .w-prev{left:2px;top:50%;transform:translateY(-50%);font-size:.95rem!important}
   .w-next{right:2px;top:50%;transform:translateY(-50%);font-size:.95rem!important}
   .w-play{bottom:4px;left:50%;transform:translateX(-50%);font-size:.95rem!important}
-  .center{position:absolute;inset:56px;border-radius:50%;background:linear-gradient(160deg,#f6f2ff,#ded3f6);
+  .center{position:absolute;inset:56px;border-radius:50%;background:linear-gradient(160deg,#f7f7f9,#d9d8de);
     border:none;cursor:pointer;box-shadow:inset 0 1px 3px rgba(44,38,64,.16);transition:transform .15s}
   .center:hover{transform:scale(1.04)}
-  .ipod-label{text-align:center;font-size:.7rem;color:var(--ink-soft);margin-top:16px}
+  .ipod-label{text-align:center;font-size:.7rem;color:var(--device-ink-soft);margin-top:16px}
 
   /* ---- content panel ---- */
-  .panel{min-height:60vh}
+  .panel{min-height:0;height:100%;overflow-y:auto;padding-right:12px;scrollbar-gutter:stable}
+  @media(max-width:860px){.panel{height:auto;overflow-y:visible;padding-right:0}}
   .panel-head{margin-bottom:26px}
+  .about-body{display:flex;gap:26px;align-items:flex-start}
+  .about-intro{flex:1;min-width:0}
+  .about-intro>p:first-child{margin-top:0}
+  .edu-head{display:flex;gap:18px;align-items:center;margin-bottom:4px}
+  .edu-head h2{margin:0}
+  .uni-logo{flex:0 0 auto;width:130px;border-radius:8px;display:block}
+  @media(max-width:860px){.edu-head{flex-direction:column;align-items:flex-start;gap:12px}}
+  .portrait{flex:0 0 auto;width:164px;aspect-ratio:4/5;object-fit:cover;object-position:center 22%;
+    border-radius:16px;border:1px solid var(--line);box-shadow:0 16px 36px rgba(10,8,18,.35)}
+  @media(max-width:860px){.about-body{flex-direction:column;gap:20px}.portrait{width:150px}}
   .kicker{font-size:.78rem;color:var(--plum-deep);margin:0 0 6px}
   .panel h1{font-family:var(--serif);font-weight:500;font-size:clamp(1.9rem,4.4vw,2.7rem);margin:0;line-height:1.12}
   .panel h2{font-family:var(--serif);font-weight:500;font-size:1.08rem;margin:22px 0 2px}
@@ -70,27 +103,71 @@
   .panel .meta{font-size:.83rem;color:var(--plum-deep);margin-top:2px}
   .panel ul.bullets{margin:10px 0 0;padding-left:1.1em;color:var(--ink-soft);font-size:.95rem}
   .panel ul.bullets li{margin-bottom:5px}
-  .rule{height:1px;background:rgba(136,124,175,.2);margin:22px 0}
+  .rule{height:1px;background:var(--line);margin:22px 0}
+  .exp-entry{--accent:var(--wisteria);padding-left:16px;border-left:3px solid var(--accent);margin-bottom:24px;
+    border-radius:0 8px 8px 0;transition:background .3s}
+  .exp-entry h2{margin-top:0}
+  .exp-head{display:flex;align-items:center;gap:14px}
+  .exp-head h2{margin:0}
+  .co-logo{flex:0 0 auto;width:auto;height:36px;max-width:110px;object-fit:contain}
+  .exp-entry.flash{background:color-mix(in srgb,var(--accent) 16%,transparent)}
   .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
-  .chip{font-size:.84rem;padding:6px 15px;border-radius:999px;background:var(--paper-dim);
-    border:1px solid rgba(136,124,175,.28);transition:background .25s,transform .25s}
-  .chip:hover{background:var(--mauve);transform:translateY(-2px)}
+  /* Tags are labels, not controls: square-ish, borderless, no hover affordance. */
+  .chip{display:inline-flex;align-items:center;font-size:.82rem;padding:5px 12px;border-radius:7px;
+    background:var(--paper-dim);color:var(--ink-soft);border:none}
+  .chip:has(img){gap:8px;padding-left:9px}
+  .chip img{flex:0 0 auto;width:18px;height:18px;object-fit:contain}
+  .chip img.flag{width:21px;height:14px;object-fit:cover;border-radius:2px;border:1px solid var(--line)}
+  /* Links are controls: solid buttons, so they can't be mistaken for the flat tags above. */
+  .doc-links{display:flex;flex-wrap:wrap;gap:11px;margin-top:30px}
+  .doc-links a{display:inline-flex;align-items:center;gap:9px;font-size:.88rem;padding:9px 18px;border-radius:999px;
+    text-decoration:none;background:var(--plum-deep);color:var(--on-plum);border:none;
+    transition:background .25s,color .25s,transform .25s}
+  .doc-links a:hover{background:var(--mauve);color:var(--on-accent);transform:translateY(-2px)}
+  .doc-links .hint{opacity:.72;font-size:.79rem}
+  .doc-links svg{width:16px;height:16px;fill:currentColor;flex:0 0 auto}
+  .doc-links svg.stroke{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  /* placeholder look clears itself as soon as a real href replaces the "#" */
+  .doc-links a[href="#"]{border-style:dashed;color:var(--ink-soft);cursor:default}
+  .doc-links a[href="#"]:hover{background:transparent;color:var(--ink-soft)}
+  .doc-links a[href="#"]::after{content:'— add link';font-size:.78rem;opacity:.7}
+  /* Kafka's mark is solid black — flip it white so it doesn't vanish on the dark theme */
+  [data-theme="dark"] .chip img.mono{filter:invert(1)}
   .view{display:none;animation:fadein .45s cubic-bezier(.22,.61,.36,1)}
   .view.on{display:block}
   @keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-  .links{display:flex;gap:16px;flex-wrap:wrap;margin-top:16px;font-size:.9rem}
-  .links a{padding:6px 15px;border-radius:999px;border:1px solid rgba(136,124,175,.4);text-decoration:none;color:var(--ink);transition:background .25s}
-  .links a:hover{background:var(--mauve)}
+  .links{display:flex;flex-direction:column;align-items:flex-start;gap:11px;margin-top:22px}
+  .links a{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);
+    font-size:.89rem;transition:color .2s,transform .2s}
+  .links a:hover{color:var(--plum-deep);transform:translateX(3px)}
+  .links svg{display:block;width:19px;height:19px;flex:0 0 auto}
+  .links svg.stroke{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .links svg.gh{fill:var(--gh)}
+
+  .top-bar{position:fixed;top:20px;right:20px;z-index:5;display:flex;align-items:center;gap:10px}
+  .theme-toggle{font:inherit;font-size:.76rem;padding:7px 15px;border-radius:999px;cursor:pointer;
+    background:var(--paper-dim);color:var(--ink);border:1px solid var(--line);transition:background .25s,color .25s}
+  .theme-toggle:hover{background:var(--mauve);color:var(--on-accent)}
+  .icon-btn{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
+    background:var(--paper-dim);color:var(--ink);border:1px solid var(--line);transition:background .25s,color .25s}
+  .icon-btn:hover{background:var(--mauve);color:var(--on-accent)}
+  .icon-btn svg{display:block;width:17px;height:17px;fill:currentColor}
 </style>
 </head>
 <body>
 <div class="ambient"><div class="blob b1"></div><div class="blob b2"></div></div>
+<div class="top-bar">
+  <a class="icon-btn" href="https://github.com/bilgesucakir/bilgesucakir-portfolio" target="_blank" rel="noopener" aria-label="View this site's source on GitHub" title="Source on GitHub">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+  </a>
+  <button class="theme-toggle" id="themeBtn">☀ Light</button>
+</div>
 
 <div class="stage">
   <!-- iPOD -->
   <div class="ipod">
     <div class="screen">
-      <div class="screen-bar"><span id="nowTitle">Bilgesu Çakır</span><span>♪</span></div>
+      <div class="screen-bar"><span id="nowTitle">Bilgesu Çakır Portfolio</span><span class="battery" aria-hidden="true"><span class="battery-fill"></span></span></div>
       <div class="menu"><ul id="menuList"></ul></div>
     </div>
     <div class="wheel">
@@ -100,7 +177,7 @@
       <button class="w-play" id="btnPlay" aria-label="Select">▶‖</button>
       <button class="center" id="btnCenter" aria-label="Select"></button>
     </div>
-    <p class="ipod-label">Use ◀◀ ▶▶ to browse, centre to select</p>
+    <p class="ipod-label">Use ◀◀ ▶▶ to browse, center to select</p>
   </div>
 
   <!-- PANEL -->
@@ -108,54 +185,187 @@
 
     <div class="view on" data-view="about">
       <div class="panel-head"><p class="kicker">Istanbul, Turkey</p><h1>Bilgesu Çakır</h1></div>
-      <p>Software Development Engineer. I build backend systems by day — currently at Hepsiburada, previously on Amadeus's Order Management System — and spend my off hours shipping small side projects, crocheting, and hunting down the next film to watch.</p>
-      <div class="links">
-        <a href="mailto:your-email@example.com">Email</a>
-        <a href="https://github.com/bilgesucakir" target="_blank" rel="noopener">GitHub</a>
-        <a href="#" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://letterboxd.com/bilgesucakir" target="_blank" rel="noopener">Letterboxd</a>
+      <div class="about-body">
+        <img class="portrait" src="images/picture.jpeg" alt="Bilgesu Çakır">
+        <div class="about-intro">
+          <p>Software Development Engineer. I build backend systems by day — currently at Hepsiburada, previously on Amadeus's Order Management System — and spend my off hours shipping small side projects, crocheting, and hunting down the next film to watch.</p>
+          <div class="links">
+            <a href="mailto:bilgesucakir@gmail.com" aria-label="Email" title="bilgesucakir@gmail.com">
+              <svg class="stroke" viewBox="0 0 24 24" stroke="#EA4335" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 7 9 5.5L21 7"/></svg>
+            <span>bilgesucakir@gmail</span>
+            </a>
+            <a href="https://github.com/bilgesucakir" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+              <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+            <span>bilgesucakir</span>
+            </a>
+            <a href="https://www.linkedin.com/in/bilgesucakir/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="#0A66C2" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.47-.9 1.63-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zm1.78 13.02H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+            <span>bilgesucakir</span>
+            </a>
+            <a href="https://www.instagram.com/a_crocheters_diary/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+              <svg class="stroke" viewBox="0 0 24 24" stroke="url(#ig)" aria-hidden="true">
+                <defs><linearGradient id="ig" x1="0" y1="1" x2="1" y2="0">
+                  <stop offset="0" stop-color="#FDCB52"/><stop offset=".45" stop-color="#EE2A7B"/><stop offset="1" stop-color="#6228D7"/>
+                </linearGradient></defs>
+                <rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><circle cx="12" cy="12" r="4.1"/>
+                <circle cx="17.6" cy="6.4" r="1.2" fill="url(#ig)" stroke="none"/>
+              </svg>
+            <span>a_crocheters_diary</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="view" data-view="education">
       <div class="panel-head"><p class="kicker">Education</p><h1>Where it started</h1></div>
-      <h2>B.S. Computer Science &amp; Engineering</h2>
-      <p class="meta">Sabancı University · Graduated June 2023</p>
+      <div class="edu-head">
+        <img class="uni-logo" src="images/sabanci.png" alt="Sabancı Üniversitesi">
+        <div>
+          <h2>B.S. Computer Science &amp; Engineering</h2>
+          <p class="meta">Sabancı University · Graduated June 2023 · GPA 3.01/4.00</p>
+        </div>
+      </div>
+      <ul class="bullets">
+        <li>75% merit scholarship — ranked in the top 2,500 nationally in the YKS university entrance exam</li>
+        <li>High Honour certificate ×2 terms, Honour certificate ×2 terms</li>
+      </ul>
+      <div class="rule"></div>
+      <h2>Coursework that stuck</h2>
+      <div class="chips">
+        <span class="chip">Algorithms</span><span class="chip">Data Structures</span><span class="chip">Operating Systems</span>
+        <span class="chip">Database Systems</span><span class="chip">Software Engineering</span><span class="chip">Computer &amp; Network Security</span>
+        <span class="chip">Machine Learning</span><span class="chip">Artificial Intelligence</span><span class="chip">Mobile App Development</span>
+      </div>
+      <div class="rule"></div>
+      <h2>Social networking web app</h2>
+      <p class="meta">Course project · Fall 2022 · Angular · TypeScript · Firebase</p>
+      <p>Built with a team of four: login, live chat with likeable messages, polls, a points system and a leaderboard. I worked on the Angular/TypeScript frontend; Firebase handled the backend.</p>
     </div>
 
     <div class="view" data-view="experience">
       <div class="panel-head"><p class="kicker">Experience</p><h1>Where I've worked</h1></div>
-      <h2>Software Development Engineer</h2>
-      <p class="meta">Hepsiburada · Current</p>
-      <p>Details to add.</p>
-      <div class="rule"></div>
-      <h2>Associate Software Development Engineer</h2>
-      <p class="meta">Amadeus, Istanbul · Jul 2025 – Jun 2026</p>
-      <p>Promoted from Junior after a year and a half on the same team.</p>
-      <div class="rule"></div>
-      <h2>Junior Software Development Engineer</h2>
-      <p class="meta">Amadeus, Istanbul · Feb 2024 – Jun 2025</p>
-      <ul class="bullets">
-        <li>Order Management System — moving ticket/PNR flows onto the IATA Order standard</li>
-        <li>Cloud-based Java services with Quarkus, running on Kubernetes</li>
-        <li>1st place, internal Amadeus bug bounty — security and privacy testing on a live system</li>
-        <li>2nd place, Amadeus Community Impact Hackathon 2024 with AYDER — accessibility app, Flutter + Java</li>
-      </ul>
+
+      <div class="exp-entry" id="exp-hepsiburada" style="--accent:var(--mauve)">
+        <div class="exp-head">
+          <img class="co-logo" src="images/hepsiburada.png" alt="Hepsiburada">
+          <div>
+            <h2>Software Development Engineer</h2>
+            <p class="meta">Hepsiburada · Current</p>
+          </div>
+        </div>
+        <p>Details to add.</p>
+      </div>
+
+      <div class="exp-entry" id="exp-amadeus-associate" style="--accent:var(--wisteria)">
+        <div class="exp-head">
+          <img class="co-logo" src="images/amadeus.png" alt="Amadeus">
+          <div>
+            <h2>Associate Software Development Engineer</h2>
+            <p class="meta">Amadeus, Istanbul · Jul 2025 – Jun 2026</p>
+          </div>
+        </div>
+        <p>Promoted from Junior after a year and a half on the same team.</p>
+        <ul class="bullets">
+          <li>Investigated and resolved defects in mission-critical distributed systems</li>
+          <li>Worked inside a SAFe setup — Scrum ceremonies, sprint planning and peer code review</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry" id="exp-amadeus-junior" style="--accent:var(--periwinkle)">
+        <div class="exp-head">
+          <img class="co-logo" src="images/amadeus.png" alt="Amadeus">
+          <div>
+            <h2>Junior Software Development Engineer</h2>
+            <p class="meta">Amadeus, Istanbul · Feb 2024 – Jun 2025</p>
+          </div>
+        </div>
+        <ul class="bullets">
+          <li>Order Management System — moving ticket/PNR flows onto the IATA Order standard, covering flight and hospitality operations</li>
+          <li>Java microservices with Spring and Maven, built on event-driven and service-oriented principles</li>
+          <li>Cloud-based services with Quarkus on Kubernetes, with unit and integration tests in Quarkus and JUnit</li>
+          <li>1st place, internal Amadeus bug bounty — security and privacy testing on a live system</li>
+          <li>2nd place, Amadeus Community Impact Hackathon 2024 with AYDER — accessibility app, Flutter + Java</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry" id="exp-vodafone" style="--accent:var(--wisteria-lt)">
+        <div class="exp-head">
+          <img class="co-logo" src="images/vodafone.png" alt="Vodafone">
+          <div>
+            <h2>Long Term Intern</h2>
+            <p class="meta">Vodafone, Istanbul · Feb 2023 – Jul 2023</p>
+          </div>
+        </div>
+        <ul class="bullets">
+          <li>Payment Solutions team, under the Core IT department</li>
+          <li>First real taste of working as part of an agile team, rituals included</li>
+          <li>Helped identify and fix defects alongside the team</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry" id="exp-renault" style="--accent:var(--plum-mid)">
+        <div class="exp-head">
+          <img class="co-logo" src="images/renault-group.png" alt="Renault Group">
+          <div>
+            <h2>Information Systems Intern</h2>
+            <p class="meta">Oyak-Renault, Bursa · Jul 2022 – Sep 2022</p>
+          </div>
+        </div>
+        <ul class="bullets">
+          <li>Built a task management web app with Angular and Node.js</li>
+          <li>Orville Summer '22 programme — weekly seminars across the business</li>
+          <li>Volunteered for Orville Spark, a reverse mentorship programme helping managers reach younger colleagues</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry" id="exp-learning-assistant" style="--accent:var(--plum-deep)">
+        <div class="exp-head">
+          <img class="co-logo" src="images/sabanci.png" alt="Sabancı University">
+          <div>
+            <h2>Learning Assistant</h2>
+            <p class="meta">Sabancı University · Oct 2021 – Jun 2022</p>
+          </div>
+        </div>
+        <ul class="bullets">
+          <li>Supported instructors on CS201 Introduction to Computing, the department's C++ fundamentals course</li>
+          <li>Ran office hours to help students through course work</li>
+        </ul>
+      </div>
     </div>
 
     <div class="view" data-view="capstone">
       <div class="panel-head"><p class="kicker">Graduation project</p><h1>Senior capstone</h1></div>
-      <h2>Project title goes here</h2>
-      <p class="meta">Sabancı University · 2022–2023</p>
-      <p>A short description of the problem, what you built, and how it turned out.</p>
-      <div class="chips"><span class="chip">Tech 1</span><span class="chip">Tech 2</span><span class="chip">Tech 3</span></div>
+      <h2>Privacy-preserving MQTT messaging</h2>
+      <p class="meta">Sabancı University · Sep 2022 – Jun 2023</p>
+      <p>MQTT is the messaging protocol half the IoT world runs on, and it leaks more than people assume. Working in a pair, we picked apart the protocol's weaknesses and designed three schemes to close them — covering confidentiality, authentication, authorisation, integrity and user privacy.</p>
+      <p>We then implemented all three across the server and client modules: ephemeral Diffie–Hellman for key exchange, authenticated encryption with AES, HMAC signatures and salting.</p>
+      <div class="chips">
+        <span class="chip">Python</span><span class="chip">MQTT</span><span class="chip">Diffie–Hellman</span>
+        <span class="chip">AES</span><span class="chip">HMAC</span>
+      </div>
+      <div class="doc-links">
+        <a href="files/mqtt-report.pdf" target="_blank" rel="noopener">
+          <svg class="stroke" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2.5H7a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.5z"/><path d="M14 2.5v5h5"/></svg>
+          Project report <span class="hint">PDF · 120 pages</span>
+        </a>
+        <a href="https://github.com/bilgesucakir/paho.mqtt.python-privacy-preserving-mqtt-messaging" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          Client
+        </a>
+        <a href="https://github.com/burcutanis/amqt-broker" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          Broker
+        </a>
+      </div>
     </div>
 
     <div class="view" data-view="projects">
       <div class="panel-head"><p class="kicker">Side projects</p><h1>What I build for fun</h1></div>
       <h2>What We'll Watch Tonight</h2>
       <p class="meta">Spring Boot · Vue · Render — shipped</p>
-      <p>Compares 2–4 people's Letterboxd watchlists and returns the films everyone already wants to see, linking straight back to each film's page. <a href="https://what-we-will-watch-tonight.onrender.com" target="_blank" rel="noopener">Live</a> · <a href="https://github.com/bilgesucakir/what-we-will-watch-tonight" target="_blank" rel="noopener">Code</a></p>
+      <p>Compares 2–4 people's Letterboxd watchlists and returns the films everyone already wants to see, linking straight back to each film's page.</p>
+      <p><a href="https://what-we-will-watch-tonight.onrender.com/" target="_blank" rel="noopener">what-we-will-watch-tonight.onrender.com</a> · <a href="https://github.com/bilgesucakir/what-we-will-watch-tonight" target="_blank" rel="noopener">Code on GitHub</a></p>
       <div class="rule"></div>
       <h2>veni vidi ami</h2>
       <p class="meta">Spring Boot · Vue · Leaflet — early stage</p>
@@ -172,12 +382,55 @@
       <h2>Interview prep repo</h2>
       <p class="meta">Idea stage</p>
       <p>Interactive demos of core CS concepts plus notes on online coding platforms.</p>
+      <div class="rule"></div>
+      <h2>Library management API</h2>
+      <p class="meta">Spring Boot · JPA · Hibernate · MySQL — Fall 2023</p>
+      <p>A RESTful API for running a library: CRUD across authors, books and checkouts, backed by MySQL with one-to-many and many-to-many relationships, and a proper error-handling layer returning clear, standardised HTTP errors.</p>
     </div>
 
     <div class="view" data-view="tools">
       <div class="panel-head"><p class="kicker">Tools</p><h1>What I build with</h1></div>
+      <h2>Languages</h2>
       <div class="chips">
-        <span class="chip">Java</span><span class="chip">Python</span><span class="chip">Quarkus</span><span class="chip">Spring Boot</span><span class="chip">Kubernetes</span><span class="chip">Vue.js</span><span class="chip">Angular</span><span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">TypeScript</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="">Java</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="">Python</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="">TypeScript</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" alt="">SQL</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" alt="">C++</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg" alt="">C#</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg" alt="">Dart</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="">HTML</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" alt="">CSS</span>
+      </div>
+      <h2>Frameworks &amp; platforms</h2>
+      <div class="chips">
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/spring/spring-original.svg" alt="">Spring Boot</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/quarkus/quarkus-original.svg" alt="">Quarkus</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/hibernate/hibernate-original.svg" alt="">Hibernate / JPA</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg" alt="">Kubernetes</span>
+        <span class="chip"><img class="mono" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apachekafka/apachekafka-original.svg" alt="">Kafka</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg" alt="">Vue.js</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/angular/angular-original.svg" alt="">Angular</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" alt="">Flutter</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="">Node.js</span>
+      </div>
+      <h2>Tooling</h2>
+      <div class="chips">
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="">Git</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/bitbucket/bitbucket-original.svg" alt="">Bitbucket</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jira/jira-original.svg" alt="">Jira</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/maven/maven-original.svg" alt="">Maven</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="">Jenkins</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sonarqube/sonarqube-original.svg" alt="">SonarQube</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg" alt="">Postman</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/grafana/grafana-original.svg" alt="">Grafana</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/junit/junit-original.svg" alt="">JUnit</span>
+      </div>
+      <h2>Spoken</h2>
+      <div class="chips">
+        <span class="chip"><img class="flag" src="images/flags/tr.png" alt="">Turkish — native</span>
+        <span class="chip"><img class="flag" src="images/flags/gb.png" alt="">English — advanced</span>
+        <span class="chip"><img class="flag" src="images/flags/de.png" alt="">German — beginner</span>
       </div>
     </div>
 
@@ -193,13 +446,23 @@
       <p>Always something playing in the background — details coming soon.</p>
     </div>
 
-    <div class="view" data-view="connect">
-      <div class="panel-head"><p class="kicker">Find me</p><h1>Elsewhere on the internet</h1></div>
-      <p><a href="https://github.com/bilgesucakir" target="_blank" rel="noopener">GitHub</a> — bilgesucakir</p>
-      <p><a href="https://letterboxd.com/bilgesucakir" target="_blank" rel="noopener">Letterboxd</a> — bilgesucakir</p>
-      <p><a href="#" target="_blank" rel="noopener">Instagram</a> — a crocheter's diary</p>
-      <p><a href="#" target="_blank" rel="noopener">LinkedIn</a> — /in/handle</p>
-      <p><a href="mailto:your-email@example.com">Email</a></p>
+    <div class="view" data-view="volunteer">
+      <div class="panel-head"><p class="kicker">Volunteer</p><h1>Time given away</h1></div>
+
+      <div class="exp-entry" id="vol-makeawish" style="--accent:var(--mauve)">
+        <h2>Make-A-Wish Türkiye</h2>
+        <p class="meta">Volunteer · current</p>
+        <p>Helping grant wishes for children with critical illnesses.</p>
+      </div>
+
+      <div class="exp-entry" id="vol-civic" style="--accent:var(--wisteria)">
+        <h2>Civic Involvement Project</h2>
+        <p class="meta">Sabancı University · Sep 2019 – Jan 2020</p>
+        <ul class="bullets">
+          <li>Ran weekly activities for primary school students, working in a pair</li>
+          <li>Planned each week's session in the group's weekly meetings</li>
+        </ul>
+      </div>
     </div>
 
   </div>
@@ -209,20 +472,32 @@
   const tracks=[
     {id:'about',label:'About me'},
     {id:'education',label:'Education'},
-    {id:'experience',label:'Experience'},
     {id:'capstone',label:'Graduation project'},
-    {id:'projects',label:'Side projects'},
+    {id:'experience',label:'Experience',children:[
+      {label:'Hepsiburada — SDE',anchor:'exp-hepsiburada'},
+      {label:'Amadeus — Associate SDE',anchor:'exp-amadeus-associate'},
+      {label:'Amadeus — Junior SDE',anchor:'exp-amadeus-junior'},
+      {label:'Vodafone — Intern',anchor:'exp-vodafone'},
+      {label:'Oyak-Renault — Intern',anchor:'exp-renault'},
+      {label:'Sabancı — Learning Assistant',anchor:'exp-learning-assistant'}
+    ]},
     {id:'tools',label:'Tools'},
-    {id:'hobbies',label:'Off the clock'},
-    {id:'connect',label:'Find me'}
+    {id:'projects',label:'Side projects'},
+    {id:'volunteer',label:'Volunteer',children:[
+      {label:'Make-A-Wish Türkiye',anchor:'vol-makeawish'},
+      {label:'Civic Involvement',anchor:'vol-civic'}
+    ]},
+    {id:'hobbies',label:'Off the clock'}
   ];
   let cursor=0, current=0;
+  let level='root'; // 'root' or {parentIndex, items}
   const list=document.getElementById('menuList');
-  const nowTitle=document.getElementById('nowTitle');
+
+  function items(){ return level==='root' ? tracks : level.items; }
 
   function renderMenu(){
-    list.innerHTML=tracks.map((t,i)=>
-      `<li class="${i===cursor?'sel':''}">${t.label}<span class="arrow">›</span></li>`).join('');
+    list.innerHTML=items().map((t,i)=>
+      `<li class="${i===cursor?'sel':''}">${t.label}<span class="arrow">${t.children?'▸':'›'}</span></li>`).join('');
     // keep highlighted item visible in the small screen
     const sel=list.querySelector('.sel');
     if(sel) sel.scrollIntoView({block:'nearest'});
@@ -230,27 +505,66 @@
   function select(i){
     current=i;
     document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.dataset.view===tracks[i].id));
-    nowTitle.textContent=tracks[i].label;
+  }
+  function highlightAnchor(id){
+    const el=document.getElementById(id);
+    if(!el) return;
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+    el.classList.add('flash');
+    setTimeout(()=>el.classList.remove('flash'),1200);
+  }
+  function enter(){
+    const list_=items(), item=list_[cursor];
+    if(level==='root'){
+      if(item.children){
+        level={parentIndex:cursor,items:item.children};
+        cursor=0;
+        select(level.parentIndex);
+        renderMenu();
+      } else {
+        select(cursor);
+      }
+    } else {
+      select(level.parentIndex);
+      if(item.anchor) highlightAnchor(item.anchor);
+    }
+  }
+  function back(){
+    if(level!=='root'){
+      cursor=level.parentIndex;
+      level='root';
+      renderMenu();
+    } else {
+      cursor=0; renderMenu(); select(0);
+    }
   }
   function move(d){
-    cursor=(cursor+d+tracks.length)%tracks.length;
+    const n=items().length;
+    cursor=(cursor+d+n)%n;
     renderMenu();
   }
   document.getElementById('btnNext').onclick=()=>move(1);
   document.getElementById('btnPrev').onclick=()=>move(-1);
-  document.getElementById('btnCenter').onclick=()=>select(cursor);
-  document.getElementById('btnPlay').onclick=()=>select(cursor);
-  document.getElementById('btnMenu').onclick=()=>{cursor=0;renderMenu();select(0)};
+  document.getElementById('btnCenter').onclick=()=>enter();
+  document.getElementById('btnPlay').onclick=()=>enter();
+  document.getElementById('btnMenu').onclick=()=>back();
   document.querySelector('.menu').addEventListener('click',e=>{
     const li=e.target.closest('li'); if(!li)return;
-    cursor=[...list.children].indexOf(li); renderMenu(); select(cursor);
+    cursor=[...list.children].indexOf(li); renderMenu(); enter();
   });
   document.addEventListener('keydown',e=>{
     if(e.key==='ArrowDown'){e.preventDefault();move(1)}
     if(e.key==='ArrowUp'){e.preventDefault();move(-1)}
-    if(e.key==='Enter'&&document.activeElement===document.body){select(cursor)}
+    if(e.key==='Enter'&&document.activeElement===document.body){enter()}
   });
   renderMenu();select(0);
+
+  const themeBtn=document.getElementById('themeBtn');
+  themeBtn.onclick=()=>{
+    const dark=document.documentElement.dataset.theme==='dark';
+    document.documentElement.dataset.theme=dark?'light':'dark';
+    themeBtn.textContent=dark?'☾ Dark':'☀ Light';
+  };
 </script>
 </body>
 </html>
