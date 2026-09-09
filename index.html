@@ -12,8 +12,17 @@
     --ink:#2c2640;--ink-soft:#5b5478;--paper:#e9e2f8;--paper-dim:#ded4f1;
     --line:rgba(136,124,175,.28);--on-accent:#2c2640;--on-plum:#ffffff;--gh:#181717;
     --thumb:rgba(136,124,175,.4);
-    /* device chrome keeps its own ink so the iPod stays readable in any theme */
+    /* device screen (LCD) keeps its own ink — always dark-on-light, like a real display */
     --device-ink:#2c2640;--device-ink-soft:#5b5478;
+    /* device body — the silver/white classic; flips to the black classic in light mode for contrast */
+    --device-body-a:#ffffff;--device-body-b:#e6e6ec;--device-body-border:rgba(20,18,30,.1);
+    --device-bezel-border:rgba(20,18,30,.18);
+    --device-wheel-a:#ffffff;--device-wheel-b:#dedde3;--device-wheel-hover:rgba(20,18,30,.06);
+    --device-center-a:#f7f7f9;--device-center-b:#d9d8de;
+    --device-center-border:rgba(20,18,30,.06);--device-center-shadow:rgba(20,18,30,.12);
+    --device-body-ink:#2c2640;--device-body-ink-soft:#5b5478;
+    /* corner glow — light and dark themes need opposite-direction shading to read against their own background */
+    --blob1:var(--mauve);--blob1-op:.22;--blob2:var(--wisteria-lt);--blob2-op:.18;
     --serif:'Fraunces',serif;--sans:'Sora',system-ui,sans-serif;
   }
   [data-theme="dark"]{
@@ -22,17 +31,23 @@
     --line:rgba(181,166,232,.24);--on-plum:#241f33;--gh:#ffffff;
     --thumb:rgba(181,166,232,.3);
   }
+  [data-theme="light"]{
+    --device-body-a:#3c3944;--device-body-b:#131116;--device-body-border:rgba(255,255,255,.08);
+    --device-bezel-border:rgba(255,255,255,.14);
+    --device-wheel-a:#332f3a;--device-wheel-b:#151319;--device-wheel-hover:rgba(255,255,255,.08);
+    --device-center-a:#68606f;--device-center-b:#332f3a;
+    --device-center-border:rgba(255,255,255,.22);--device-center-shadow:rgba(0,0,0,.4);
+    --device-body-ink:#f1edfa;--device-body-ink-soft:#b6acd1;
+    --blob1:#544878;--blob1-op:.4;--blob2:#3f3560;--blob2-op:.36;
+  }
   *{box-sizing:border-box}
   html{overflow-y:scroll;scrollbar-gutter:stable}
   body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.65;min-height:100vh;
     transition:background .4s,color .4s}
 
-  /* scrollbars — track stays invisible */
-  html,.panel{scrollbar-width:thin;scrollbar-color:var(--thumb) transparent}
-  ::-webkit-scrollbar{width:8px;height:8px}
-  ::-webkit-scrollbar-track{background:transparent}
-  ::-webkit-scrollbar-thumb{background:var(--thumb);border-radius:99px}
-  ::-webkit-scrollbar-corner{background:transparent}
+  /* scrollbars — fully hidden everywhere; scrolling still works via wheel/trackpad/keys */
+  html,.panel{scrollbar-width:none}
+  html::-webkit-scrollbar,.panel::-webkit-scrollbar{display:none}
   @media(min-width:861px){html,body{height:100%;overflow:hidden}}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   a{color:var(--plum-deep)}
@@ -40,19 +55,26 @@
 
   .ambient{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
   .blob{position:absolute;border-radius:50%;filter:blur(90px)}
-  .b1{width:520px;height:520px;background:var(--mauve);top:-200px;left:-180px;opacity:.22}
-  .b2{width:420px;height:420px;background:var(--wisteria-lt);bottom:-200px;right:-160px;opacity:.18}
+  .b1{width:clamp(520px,34vw,900px);height:clamp(520px,34vw,900px);background:var(--blob1);
+    top:-15vw;left:-12vw;opacity:var(--blob1-op);transition:opacity .4s}
+  .b2{width:clamp(420px,28vw,760px);height:clamp(420px,28vw,760px);background:var(--blob2);
+    bottom:-15vw;right:-10vw;opacity:var(--blob2-op);transition:opacity .4s}
 
   .stage{display:grid;grid-template-columns:300px 1fr;gap:clamp(32px,6vw,80px);
     max-width:1180px;margin:0 auto;padding:clamp(32px,6vw,72px) clamp(20px,5vw,48px);align-items:start;height:100vh}
   @media(max-width:860px){.stage{grid-template-columns:1fr;gap:36px;height:auto}}
 
   /* ---- iPod ---- */
-  .ipod{position:relative;width:284px;justify-self:center;
-    background:linear-gradient(160deg,#ffffff,#e6e6ec);border-radius:32px;padding:20px 20px 26px;
-    box-shadow:0 22px 50px rgba(44,38,64,.22),inset 0 1px 0 #fff;border:1px solid rgba(20,18,30,.1)}
+  .ipod{position:relative;width:284px;justify-self:center;transition:background .4s,border-color .4s;
+    background:linear-gradient(160deg,var(--device-body-a),var(--device-body-b));border-radius:32px;padding:20px 20px 26px;
+    box-shadow:0 22px 50px rgba(44,38,64,.22),inset 0 1px 0 rgba(255,255,255,.5);border:1px solid var(--device-body-border)}
+  /* glossy top-left sheen — gives the plastic case some shading instead of a flat fill */
+  .ipod::before{content:'';position:absolute;inset:0;border-radius:32px;pointer-events:none;
+    background:radial-gradient(130% 65% at 28% -12%,rgba(255,255,255,.55),transparent 60%);
+    opacity:.5;transition:opacity .4s}
+  [data-theme="light"] .ipod::before{opacity:.16}
   .screen{background:#f7f4ff;border-radius:8px;height:212px;padding:0;overflow:hidden;
-    border:1px solid rgba(20,18,30,.18);box-shadow:inset 0 2px 8px rgba(44,38,64,.12);display:flex;flex-direction:column}
+    border:1px solid var(--device-bezel-border);box-shadow:inset 0 2px 8px rgba(44,38,64,.12);display:flex;flex-direction:column}
   .screen-bar{height:22px;flex:0 0 22px;background:linear-gradient(180deg,#eceaf0,#dcdbe2);
     display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:.62rem;color:var(--device-ink-soft)}
   .battery{position:relative;width:20px;height:10px;border:1px solid var(--device-ink-soft);border-radius:2px;display:inline-block}
@@ -66,20 +88,22 @@
   .menu li .arrow{opacity:.5;font-size:.7rem}
   .menu li.sel .arrow{opacity:.9}
 
-  .wheel{width:180px;height:180px;border-radius:50%;margin:24px auto 0;position:relative;
-    background:radial-gradient(circle at 50% 35%,#ffffff,#dedde3);
-    box-shadow:0 3px 10px rgba(44,38,64,.16),inset 0 1px 0 #fff;border:1px solid rgba(20,18,30,.1)}
-  .wheel button{position:absolute;background:none;border:none;cursor:pointer;color:var(--device-ink-soft);
+  .wheel{width:180px;height:180px;border-radius:50%;margin:24px auto 0;position:relative;transition:background .4s,border-color .4s;
+    background:radial-gradient(circle at 50% 35%,var(--device-wheel-a),var(--device-wheel-b));
+    box-shadow:0 3px 10px rgba(44,38,64,.16),inset 0 1px 0 rgba(255,255,255,.4);border:1px solid var(--device-body-border)}
+  .wheel button{position:absolute;background:none;border:none;cursor:pointer;color:var(--device-body-ink-soft);
     font-size:.68rem;letter-spacing:.06em;padding:8px 12px;border-radius:10px;transition:color .2s,background .2s}
-  .wheel button:hover{color:var(--device-ink);background:rgba(20,18,30,.06)}
+  .wheel button:hover{color:var(--device-body-ink);background:var(--device-wheel-hover)}
   .w-menu{top:6px;left:50%;transform:translateX(-50%)}
   .w-prev{left:2px;top:50%;transform:translateY(-50%);font-size:.95rem!important}
   .w-next{right:2px;top:50%;transform:translateY(-50%);font-size:.95rem!important}
   .w-play{bottom:4px;left:50%;transform:translateX(-50%);font-size:.95rem!important}
-  .center{position:absolute;inset:56px;border-radius:50%;background:linear-gradient(160deg,#f7f7f9,#d9d8de);
-    border:none;cursor:pointer;box-shadow:inset 0 1px 3px rgba(44,38,64,.16);transition:transform .15s}
+  .center{position:absolute;inset:56px;border-radius:50%;background:linear-gradient(160deg,var(--device-center-a),var(--device-center-b));
+    border:1px solid var(--device-center-border);cursor:pointer;
+    box-shadow:inset 0 1px 3px rgba(44,38,64,.16),0 1px 4px var(--device-center-shadow);
+    transition:background .4s,border-color .4s,transform .15s}
   .center:hover{transform:scale(1.04)}
-  .ipod-label{text-align:center;font-size:.7rem;color:var(--device-ink-soft);margin-top:16px}
+  .ipod-label{text-align:center;font-size:.7rem;color:var(--device-body-ink-soft);margin-top:16px;transition:color .4s}
 
   /* ---- content panel ---- */
   .panel{min-height:0;height:100%;overflow-y:auto;padding-right:12px;scrollbar-gutter:stable}
@@ -109,8 +133,14 @@
   .exp-entry h2{margin-top:0}
   .exp-head{display:flex;align-items:center;gap:14px}
   .exp-head h2{margin:0}
+  .role-rows{margin:10px 0 0}
+  p.role-row{font-size:.83rem;color:var(--ink);font-weight:400;margin:2px 0 0}
   .co-logo{flex:0 0 auto;width:auto;height:36px;max-width:110px;object-fit:contain}
+  /* this badge is a flat JPEG with a white square baked in — clip to the circle the ring already draws */
+  .co-logo-round{width:36px;height:36px;border-radius:50%;object-fit:cover}
   .exp-entry.flash{background:color-mix(in srgb,var(--accent) 16%,transparent)}
+  /* marks a detail that's still incoming (a year, a photo) without looking like a broken link */
+  .tbd{font-style:italic;opacity:.68}
   .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
   /* Tags are labels, not controls: square-ish, borderless, no hover affordance. */
   .chip{display:inline-flex;align-items:center;font-size:.82rem;padding:5px 12px;border-radius:7px;
@@ -118,9 +148,11 @@
   .chip:has(img){gap:8px;padding-left:9px}
   .chip img{flex:0 0 auto;width:18px;height:18px;object-fit:contain}
   .chip img.flag{width:21px;height:14px;object-fit:cover;border-radius:2px;border:1px solid var(--line)}
+  .chip.flag-only{padding:7px 9px}
+  .chip.flag-only img.flag{width:26px;height:17px}
   /* Links are controls: solid buttons, so they can't be mistaken for the flat tags above. */
   .doc-links{display:flex;flex-wrap:wrap;gap:11px;margin-top:30px}
-  .doc-links a{display:inline-flex;align-items:center;gap:9px;font-size:.88rem;padding:9px 18px;border-radius:999px;
+  .doc-links a{display:inline-flex;align-items:center;gap:7px;font-size:.88rem;padding:7px 13px;border-radius:999px;
     text-decoration:none;background:var(--plum-deep);color:var(--on-plum);border:none;
     transition:background .25s,color .25s,transform .25s}
   .doc-links a:hover{background:var(--mauve);color:var(--on-accent);transform:translateY(-2px)}
@@ -131,6 +163,9 @@
   .doc-links a[href="#"]{border-style:dashed;color:var(--ink-soft);cursor:default}
   .doc-links a[href="#"]:hover{background:transparent;color:var(--ink-soft)}
   .doc-links a[href="#"]::after{content:'— add link';font-size:.78rem;opacity:.7}
+  .doc-links.tight{margin-top:14px;margin-bottom:2px}
+  .gh-icon{width:16px;height:16px;fill:currentColor;flex:0 0 auto}
+  .live-icon{width:16px;height:16px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   /* Kafka's mark is solid black — flip it white so it doesn't vanish on the dark theme */
   [data-theme="dark"] .chip img.mono{filter:invert(1)}
   .view{display:none;animation:fadein .45s cubic-bezier(.22,.61,.36,1)}
@@ -145,16 +180,22 @@
   .links svg.gh{fill:var(--gh)}
 
   .top-bar{position:fixed;top:20px;right:20px;z-index:5;display:flex;align-items:center;gap:10px}
+  .icon-btn{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;font:inherit;
+    background:var(--paper-dim);color:var(--ink);border:1px solid var(--line);cursor:pointer;
+    transition:background .25s,color .25s}
+  .icon-btn:hover{background:var(--mauve);color:var(--on-accent)}
+  .icon-btn svg{display:block;width:17px;height:17px;fill:currentColor}
+  .icon-btn svg.stroke{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   .theme-toggle{font:inherit;font-size:.76rem;padding:7px 15px;border-radius:999px;cursor:pointer;
     background:var(--paper-dim);color:var(--ink);border:1px solid var(--line);transition:background .25s,color .25s}
   .theme-toggle:hover{background:var(--mauve);color:var(--on-accent)}
-  .icon-btn{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
-    background:var(--paper-dim);color:var(--ink);border:1px solid var(--line);transition:background .25s,color .25s}
-  .icon-btn:hover{background:var(--mauve);color:var(--on-accent)}
-  .icon-btn svg{display:block;width:17px;height:17px;fill:currentColor}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="gh-mark" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></symbol>
+  <symbol id="live-mark" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4 10 14M10 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-4"/></symbol>
+</svg>
 <div class="ambient"><div class="blob b1"></div><div class="blob b2"></div></div>
 <div class="top-bar">
   <a class="icon-btn" href="https://github.com/bilgesucakir/bilgesucakir-portfolio" target="_blank" rel="noopener" aria-label="View this site's source on GitHub" title="Source on GitHub">
@@ -188,11 +229,11 @@
       <div class="about-body">
         <img class="portrait" src="images/picture.jpeg" alt="Bilgesu Çakır">
         <div class="about-intro">
-          <p>Software Development Engineer. I build backend systems by day — currently at Hepsiburada, previously on Amadeus's Order Management System — and spend my off hours shipping small side projects, crocheting, and hunting down the next film to watch.</p>
+          <p>Software Development Engineer. I build backend systems by day — currently at Hepsiburada, and spend my off hours shipping small side projects, crocheting, and hunting down the next film to watch.</p>
           <div class="links">
             <a href="mailto:bilgesucakir@gmail.com" aria-label="Email" title="bilgesucakir@gmail.com">
               <svg class="stroke" viewBox="0 0 24 24" stroke="#EA4335" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 7 9 5.5L21 7"/></svg>
-            <span>bilgesucakir@gmail</span>
+            <span>bilgesucakir@gmail.com</span>
             </a>
             <a href="https://github.com/bilgesucakir" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
               <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -227,20 +268,17 @@
         </div>
       </div>
       <ul class="bullets">
-        <li>75% merit scholarship — ranked in the top 2,500 nationally in the YKS university entrance exam</li>
+        <li>75% scholarship — ranked in the top 2,500 nationally in the YKS university entrance exam</li>
         <li>High Honour certificate ×2 terms, Honour certificate ×2 terms</li>
       </ul>
       <div class="rule"></div>
       <h2>Coursework that stuck</h2>
       <div class="chips">
         <span class="chip">Algorithms</span><span class="chip">Data Structures</span><span class="chip">Operating Systems</span>
-        <span class="chip">Database Systems</span><span class="chip">Software Engineering</span><span class="chip">Computer &amp; Network Security</span>
-        <span class="chip">Machine Learning</span><span class="chip">Artificial Intelligence</span><span class="chip">Mobile App Development</span>
+        <span class="chip">Computer Networks</span><span class="chip">Computer &amp; Network Security</span><span class="chip">Database Systems</span>
+        <span class="chip">Software Engineering</span><span class="chip">Machine Learning</span><span class="chip">Artificial Intelligence</span>
+        <span class="chip">Mobile App Development</span>
       </div>
-      <div class="rule"></div>
-      <h2>Social networking web app</h2>
-      <p class="meta">Course project · Fall 2022 · Angular · TypeScript · Firebase</p>
-      <p>Built with a team of four: login, live chat with likeable messages, polls, a points system and a leaderboard. I worked on the Angular/TypeScript frontend; Firebase handled the backend.</p>
     </div>
 
     <div class="view" data-view="experience">
@@ -251,41 +289,36 @@
           <img class="co-logo" src="images/hepsiburada.png" alt="Hepsiburada">
           <div>
             <h2>Software Development Engineer</h2>
-            <p class="meta">Hepsiburada · Current</p>
+            <p class="meta">Hepsiburada · Aug 2026 - Current</p>
           </div>
         </div>
-        <p>Details to add.</p>
-      </div>
-
-      <div class="exp-entry" id="exp-amadeus-associate" style="--accent:var(--wisteria)">
-        <div class="exp-head">
-          <img class="co-logo" src="images/amadeus.png" alt="Amadeus">
-          <div>
-            <h2>Associate Software Development Engineer</h2>
-            <p class="meta">Amadeus, Istanbul · Jul 2025 – Jun 2026</p>
-          </div>
-        </div>
-        <p>Promoted from Junior after a year and a half on the same team.</p>
         <ul class="bullets">
-          <li>Investigated and resolved defects in mission-critical distributed systems</li>
-          <li>Worked inside a SAFe setup — Scrum ceremonies, sprint planning and peer code review</li>
+          <li>Backend engineer on Customer Care — working on the core product agents use to resolve issues of sellers and customers</li>
+          <li>Built and maintained Java/Spring Boot microservices backed by PostgreSQL, using Kafka for async event-driven communication alongside REST APIs for synchronous calls between services</li>
+          <li>Used Docker for containerization, OpenSearch for logging and search, and BigQuery/SQL for data-side analysis</li>
+          <li>Owned features end-to-end — picked up tasks, fixed bugs, and handled database-level operations directly</li>
         </ul>
       </div>
 
-      <div class="exp-entry" id="exp-amadeus-junior" style="--accent:var(--periwinkle)">
+      <div class="exp-entry" id="exp-amadeus" style="--accent:var(--wisteria)">
         <div class="exp-head">
           <img class="co-logo" src="images/amadeus.png" alt="Amadeus">
           <div>
-            <h2>Junior Software Development Engineer</h2>
-            <p class="meta">Amadeus, Istanbul · Feb 2024 – Jun 2025</p>
+            <h2>Software Development Engineer</h2>
+            <p class="meta">Amadeus, Istanbul · Feb 2024 – Jun 2026</p>
           </div>
         </div>
+        <div class="role-rows">
+          <p class="role-row">Associate Software Development Engineer · Jul 2025 – Jun 2026</p>
+          <p class="role-row">Junior Software Development Engineer · Feb 2024 – Jun 2025</p>
+        </div>
         <ul class="bullets">
-          <li>Order Management System — moving ticket/PNR flows onto the IATA Order standard, covering flight and hospitality operations</li>
-          <li>Java microservices with Spring and Maven, built on event-driven and service-oriented principles</li>
-          <li>Cloud-based services with Quarkus on Kubernetes, with unit and integration tests in Quarkus and JUnit</li>
-          <li>1st place, internal Amadeus bug bounty — security and privacy testing on a live system</li>
-          <li>2nd place, Amadeus Community Impact Hackathon 2024 with AYDER — accessibility app, Flutter + Java</li>
+          <li>Worked in the Order Management System under Nevio, building one unified order per traveller per IATA's One Order standard</li>
+          <li>Covered end-to-end travel processes — flights to hospitality — working with airlines like Finnair, Air France-KLM, and Saudia</li>
+          <li>Built event-driven, service-oriented Java microservices (Spring, Quarkus, Maven) on Kubernetes/OpenShift</li>
+          <li>Wrote unit and integration tests with Quarkus + JUnit; diagnosed and fixed defects in mission-critical distributed systems handling live airline traffic</li>
+          <li>Proposed and led internal projects to streamline the department's dev process</li>
+          <li>1st place, internal security/privacy bug bounty · 2nd place, Community Impact Hackathon (accessibility app, Flutter + Java)</li>
         </ul>
       </div>
 
@@ -298,9 +331,8 @@
           </div>
         </div>
         <ul class="bullets">
-          <li>Payment Solutions team, under the Core IT department</li>
-          <li>First real taste of working as part of an agile team, rituals included</li>
-          <li>Helped identify and fix defects alongside the team</li>
+          <li>Part of the Payment Solutions team within Core IT, building and maintaining backend features with Java and Spring Boot</li>
+          <li>Gained first hands-on agile experience — sprint rituals, planning, and team collaboration</li>
         </ul>
       </div>
 
@@ -313,9 +345,9 @@
           </div>
         </div>
         <ul class="bullets">
-          <li>Built a task management web app with Angular and Node.js</li>
-          <li>Orville Summer '22 programme — weekly seminars across the business</li>
-          <li>Volunteered for Orville Spark, a reverse mentorship programme helping managers reach younger colleagues</li>
+          <li>Joined the Information Systems department as part of the Orville Summer '22 programme, gaining first-hand experience with agile development practices</li>
+          <li>Designed and built a task management web app from scratch using Angular, Node.js, MongoDB</li>
+          <li>Took part in Orville Spark, a reverse mentorship programme connecting managers with younger colleagues</li>
         </ul>
       </div>
 
@@ -328,8 +360,8 @@
           </div>
         </div>
         <ul class="bullets">
-          <li>Supported instructors on CS201 Introduction to Computing, the department's C++ fundamentals course</li>
-          <li>Ran office hours to help students through course work</li>
+          <li>Supported instructors on CS201, Introduction to Computing</li>
+          <li>Helped students with course concepts and ran office hours, hands-on with C++</li>
         </ul>
       </div>
     </div>
@@ -363,29 +395,39 @@
     <div class="view" data-view="projects">
       <div class="panel-head"><p class="kicker">Side projects</p><h1>What I build for fun</h1></div>
       <h2>What We'll Watch Tonight</h2>
-      <p class="meta">Spring Boot · Vue · Render — shipped</p>
+      <p class="meta">Spring Boot · Vue · Jsoup — shipped</p>
       <p>Compares 2–4 people's Letterboxd watchlists and returns the films everyone already wants to see, linking straight back to each film's page.</p>
-      <p><a href="https://what-we-will-watch-tonight.onrender.com/" target="_blank" rel="noopener">what-we-will-watch-tonight.onrender.com</a> · <a href="https://github.com/bilgesucakir/what-we-will-watch-tonight" target="_blank" rel="noopener">Code on GitHub</a></p>
+      <div class="doc-links tight"><a href="https://what-we-will-watch-tonight.onrender.com/" target="_blank" rel="noopener"><svg class="live-icon"><use href="#live-mark"/></svg>Live site</a><a href="https://github.com/bilgesucakir/what-we-will-watch-tonight" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
       <div class="rule"></div>
-      <h2>veni vidi ami</h2>
+      <h2>veni-vidi-emi</h2>
       <p class="meta">Spring Boot · Vue · Leaflet — early stage</p>
-      <p>Map-based aggregator pulling secondhand listings from Sahibinden, Dolap and others, plotted by area.</p>
+      <p>"I came, I saw, I bought" — a map-based aggregator pulling secondhand listings from Sahibinden, Dolap and others, plotted by area.</p>
+      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/veni-vidi-emi" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
+      <div class="rule"></div>
+      <h2>stitch-grapher</h2>
+      <p class="meta">Java · Spring Boot · Treejs — shipped</p>
+      <p>Parses text crochet patterns — repeats, increases, decreases, magic rings — into a stitch connectivity graph, then lays it out as a 2D or 3D visualization.</p>
+      <div class="doc-links tight"><a href="https://stitch-grapher.onrender.com" target="_blank" rel="noopener"><svg class="live-icon"><use href="#live-mark"/></svg>Live site</a><a href="https://github.com/bilgesucakir/stitch-grapher" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
+      <div class="rule"></div>
+      <h2>stitch-modeller</h2>
+      <p class="meta">Java — concept stage</p>
+      <p>stitch-grapher's planned sequel: a comprehensive 3D modeller that takes the connectivity graph as input and renders the piece in three dimensions.</p>
+      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/stitch-modeller" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
       <div class="rule"></div>
       <h2>account-singularity</h2>
-      <p class="meta">TypeScript extension · Python vault — in progress</p>
-      <p>One master identity for signing up everywhere else, backed by a local encrypted vault.</p>
+      <p class="meta">TypeScript extension — in progress</p>
+      <p>One master identity for signing up everywhere else, backed by an encrypted vault.</p>
+      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/account-singularity-extension" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
       <div class="rule"></div>
-      <h2>Jetlag planner</h2>
+      <h2>Jetlag Reset</h2>
       <p class="meta">Concept stage</p>
       <p>Reads flight details from your calendar and builds a sleep, rest and meal-timing plan around the trip.</p>
+      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/jetlag-reset" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
       <div class="rule"></div>
-      <h2>Interview prep repo</h2>
-      <p class="meta">Idea stage</p>
-      <p>Interactive demos of core CS concepts plus notes on online coding platforms.</p>
-      <div class="rule"></div>
-      <h2>Library management API</h2>
-      <p class="meta">Spring Boot · JPA · Hibernate · MySQL — Fall 2023</p>
-      <p>A RESTful API for running a library: CRUD across authors, books and checkouts, backed by MySQL with one-to-many and many-to-many relationships, and a proper error-handling layer returning clear, standardised HTTP errors.</p>
+      <h2>Shaker</h2>
+      <p class="meta">Spring Boot · Vue 3 · MongoDB — early stage</p>
+      <p>A cocktail app: recipes, guidelines, a personal diary, sociallizing and events</p>
+      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/shaker" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
     </div>
 
     <div class="view" data-view="tools">
@@ -394,11 +436,12 @@
       <div class="chips">
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="">Java</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="">Python</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="">TypeScript</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" alt="">SQL</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg" alt="">C</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" alt="">C++</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg" alt="">C#</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg" alt="">Dart</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="">TypeScript</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="">JavaScript</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="">HTML</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" alt="">CSS</span>
       </div>
@@ -409,58 +452,113 @@
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/hibernate/hibernate-original.svg" alt="">Hibernate / JPA</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg" alt="">Kubernetes</span>
         <span class="chip"><img class="mono" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apachekafka/apachekafka-original.svg" alt="">Kafka</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/rabbitmq/rabbitmq-original.svg" alt="">RabbitMQ</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dot-net/dot-net-original.svg" alt="">.NET</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg" alt="">Vue.js</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/angular/angular-original.svg" alt="">Angular</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" alt="">Flutter</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="">Node.js</span>
       </div>
+      <h2>Databases</h2>
+      <div class="chips">
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" alt="">MySQL</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" alt="">PostgreSQL</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" alt="">MongoDB</span>
+      </div>
       <h2>Tooling</h2>
       <div class="chips">
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="">Git</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/bitbucket/bitbucket-original.svg" alt="">Bitbucket</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jira/jira-original.svg" alt="">Jira</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/maven/maven-original.svg" alt="">Maven</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/junit/junit-original.svg" alt="">JUnit</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="">Git</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="">Docker</span>
+        <span class="chip"><img class="mono" src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/redhatopenshift.svg" alt="">OpenShift</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jira/jira-original.svg" alt="">Jira</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="">Jenkins</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sonarqube/sonarqube-original.svg" alt="">SonarQube</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg" alt="">Postman</span>
         <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/grafana/grafana-original.svg" alt="">Grafana</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/junit/junit-original.svg" alt="">JUnit</span>
-      </div>
-      <h2>Spoken</h2>
-      <div class="chips">
-        <span class="chip"><img class="flag" src="images/flags/tr.png" alt="">Turkish — native</span>
-        <span class="chip"><img class="flag" src="images/flags/gb.png" alt="">English — advanced</span>
-        <span class="chip"><img class="flag" src="images/flags/de.png" alt="">German — beginner</span>
       </div>
     </div>
 
     <div class="view" data-view="hobbies">
-      <div class="panel-head"><p class="kicker">Off the clock</p><h1>Outside of code</h1></div>
+      <div class="panel-head"><p class="kicker">Off the clock</p><h1>Beyond the code</h1></div>
+
+      <h2>Flute</h2>
+      <p>Classically trained on flute for almost ten years, with 20+ live performances, even one abroad — this is where I rest my soul.</p>
+      <div class="rule"></div>
+
+      <h2>Fencing</h2>
+      <p>Was a fencer for 8+ years — national athlete, representing Türkiye at international tournaments.</p>
+      <div class="rule"></div>
+
       <h2>Crochet</h2>
-      <p>Working through a growing pile of yarn, one project at a time — documented (slowly) on Instagram as <em>a crocheter's diary</em>.</p>
+      <p>One of my passions — I make bags, plushies, clothing, scarves and berets, one project at a time. Documented (slowly) on Instagram</p>
       <div class="rule"></div>
+
       <h2>Film</h2>
-      <p>A running Letterboxd watchlist, which is what started the What We'll Watch Tonight project.</p>
+      <p>Enjoying arthouse, especially Mediterranean cinema — active on Letterboxd, which is what started the What We'll Watch Tonight project.</p>
       <div class="rule"></div>
-      <h2>Music</h2>
-      <p>Always something playing in the background — details coming soon.</p>
+
+      <h2>Painting</h2>
+      <p>Acrylic painting, mostly small canvases.</p>
+      <div class="rule"></div>
+
+      <h2>Baking</h2>
+      <p>Like trying new recipes and seeing a dessert come together from scratch.</p>
+      <div class="rule"></div>
+
+      <h2>Birdwatching</h2>
+      <p>Amateur bird watcher, and owner of a Pacific Parrotlet.</p>
+      <div class="rule"></div>
+
+      <h2>Video games</h2>
+      <p>Mostly a fan of action-adventure and roguelike games. My favorite lately is Red Dead Redemption 2.</p>
+      <div class="rule"></div>
+
+      <h2>Mixology</h2>
+      <p>Trying out classical recipes as well as coming up with my own experimental ones.</p>
+      <div class="rule"></div>
+
+      <h2>Travel</h2>
+      <p>Love historical sightseeing. Countries visited so far:</p>
+      <div class="chips">
+        <span class="chip flag-only" title="Germany"><img class="flag" src="images/flags/de.png" alt="Germany"></span>
+        <span class="chip flag-only" title="Austria"><img class="flag" src="images/flags/at.png" alt="Austria"></span>
+        <span class="chip flag-only" title="Belgium"><img class="flag" src="images/flags/be.png" alt="Belgium"></span>
+        <span class="chip flag-only" title="Bulgaria"><img class="flag" src="images/flags/bg.png" alt="Bulgaria"></span>
+        <span class="chip flag-only" title="France"><img class="flag" src="images/flags/fr.png" alt="France"></span>
+        <span class="chip flag-only" title="Italy"><img class="flag" src="images/flags/it.png" alt="Italy"></span>
+        <span class="chip flag-only" title="Hungary"><img class="flag" src="images/flags/hu.png" alt="Hungary"></span>
+        <span class="chip flag-only" title="Greece"><img class="flag" src="images/flags/gr.png" alt="Greece"></span>
+      </div>
     </div>
 
     <div class="view" data-view="volunteer">
       <div class="panel-head"><p class="kicker">Volunteer</p><h1>Time given away</h1></div>
 
       <div class="exp-entry" id="vol-makeawish" style="--accent:var(--mauve)">
-        <h2>Make-A-Wish Türkiye</h2>
-        <p class="meta">Volunteer · current</p>
-        <p>Helping grant wishes for children with critical illnesses.</p>
+        <div class="exp-head">
+          <img class="co-logo" src="images/makeawish.png" alt="Make-A-Wish Türkiye">
+          <div>
+            <h2>Make-A-Wish Türkiye</h2>
+            <p class="meta">Volunteer · Jul 2026 - current</p>
+          </div>
+        </div>
+        <ul class="bullets">
+          <li>Helping plan and carry out wish-granting experiences that bring moments of joy and hope to children facing critical illnesses</li>
+        </ul>
       </div>
 
       <div class="exp-entry" id="vol-civic" style="--accent:var(--wisteria)">
-        <h2>Civic Involvement Project</h2>
-        <p class="meta">Sabancı University · Sep 2019 – Jan 2020</p>
+        <div class="exp-head">
+          <img class="co-logo co-logo-round" src="images/cip.jpeg" alt="Civic Involvement Projects">
+          <div>
+            <h2>Civic Involvement Projects</h2>
+            <p class="meta">Sabancı University · Volunteer · Sep 2019 – Jan 2020</p>
+          </div>
+        </div>
         <ul class="bullets">
-          <li>Ran weekly activities for primary school students, working in a pair</li>
-          <li>Planned each week's session in the group's weekly meetings</li>
+          <li>Ran weekly activities for primary school students as part of a university volunteer group, aimed at engaging kids in hands-on learning and creativity</li>
         </ul>
       </div>
     </div>
@@ -470,13 +568,12 @@
 
 <script>
   const tracks=[
-    {id:'about',label:'About me'},
+    {id:'about',label:'About me'},  
     {id:'education',label:'Education'},
     {id:'capstone',label:'Graduation project'},
     {id:'experience',label:'Experience',children:[
       {label:'Hepsiburada — SDE',anchor:'exp-hepsiburada'},
-      {label:'Amadeus — Associate SDE',anchor:'exp-amadeus-associate'},
-      {label:'Amadeus — Junior SDE',anchor:'exp-amadeus-junior'},
+      {label:'Amadeus — SDE',anchor:'exp-amadeus'},
       {label:'Vodafone — Intern',anchor:'exp-vodafone'},
       {label:'Oyak-Renault — Intern',anchor:'exp-renault'},
       {label:'Sabancı — Learning Assistant',anchor:'exp-learning-assistant'}
