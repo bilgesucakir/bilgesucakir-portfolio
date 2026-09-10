@@ -53,6 +53,8 @@
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   a{color:var(--plum-deep)}
   button:focus-visible{outline:2px solid var(--plum-deep);outline-offset:3px}
+  .view:focus{outline:none}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
   .ambient{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
   .blob{position:absolute;border-radius:50%;filter:blur(90px)}
@@ -82,12 +84,14 @@
   .battery::after{content:'';position:absolute;top:2.5px;right:-3px;width:2px;height:4px;background:var(--device-ink-soft);border-radius:0 1px 1px 0}
   .battery-fill{position:absolute;top:1px;bottom:1px;left:1px;width:72%;background:var(--device-ink-soft);border-radius:1px}
   .menu{flex:1;overflow:hidden;padding:0}
-  .menu li{list-style:none;padding:6px 12px;font-size:.8rem;display:flex;justify-content:space-between;
-    color:var(--device-ink);transition:background .15s,color .15s}
   .menu ul{margin:0;padding:0}
-  .menu li.sel{background:linear-gradient(180deg,var(--wisteria-lt),var(--plum-mid));color:#fff}
-  .menu li .arrow{opacity:.5;font-size:.7rem}
-  .menu li.sel .arrow{opacity:.9}
+  .menu li{list-style:none}
+  .menu li a{padding:6px 12px;font-size:.8rem;display:flex;justify-content:space-between;
+    color:var(--device-ink);text-decoration:none;transition:background .15s,color .15s}
+  .menu li a[aria-current]{background:linear-gradient(180deg,var(--wisteria-lt),var(--plum-mid));color:#fff}
+  .menu li a:focus-visible{outline:2px solid var(--plum-deep);outline-offset:-2px}
+  .menu li a .arrow{opacity:.5;font-size:.7rem}
+  .menu li a[aria-current] .arrow{opacity:.9}
 
   .wheel{width:180px;height:180px;border-radius:50%;margin:24px auto 0;position:relative;transition:background .4s,border-color .4s;
     background:radial-gradient(circle at 50% 35%,var(--device-wheel-a),var(--device-wheel-b));
@@ -210,7 +214,7 @@
   <div class="ipod">
     <div class="screen">
       <div class="screen-bar"><span id="nowTitle">Bilgesu Çakır Portfolio</span><span class="battery" aria-hidden="true"><span class="battery-fill"></span></span></div>
-      <div class="menu"><ul id="menuList"></ul></div>
+      <nav class="menu" aria-label="Portfolio sections"><ul id="menuList"></ul></nav>
     </div>
     <div class="wheel">
       <button class="w-menu" id="btnMenu">MENU</button>
@@ -224,8 +228,9 @@
 
   <!-- PANEL -->
   <div class="panel" id="panel">
+    <p class="sr-only" id="srStatus" aria-live="polite"></p>
 
-    <div class="view on" data-view="about">
+    <div class="view on" data-view="about" id="about" tabindex="-1" role="region" aria-label="About">
       <div class="panel-head"><p class="kicker">Istanbul, Turkey</p><h1>Bilgesu Çakır</h1></div>
       <div class="about-body">
         <img class="portrait" src="images/picture.jpeg" alt="Bilgesu Çakır">
@@ -259,7 +264,7 @@
       </div>
     </div>
 
-    <div class="view" data-view="education">
+    <div class="view" data-view="education" id="education" tabindex="-1" role="region" aria-label="Education">
       <div class="panel-head"><p class="kicker">Education</p><h1>Where it started</h1></div>
       <div class="edu-head">
         <img class="uni-logo" src="images/sabanci.png" alt="Sabancı Üniversitesi">
@@ -282,10 +287,10 @@
       </div>
     </div>
 
-    <div class="view" data-view="experience">
+    <div class="view" data-view="experience" id="experience" tabindex="-1" role="region" aria-label="Experience">
       <div class="panel-head"><p class="kicker">Experience</p><h1>Where I've worked</h1></div>
 
-      <div class="exp-entry" id="exp-hepsiburada" style="--accent:var(--mauve)">
+      <div class="exp-entry" id="exp-hepsiburada" tabindex="-1" style="--accent:var(--mauve)">
         <div class="exp-head">
           <img class="co-logo" src="images/hepsiburada.png" alt="Hepsiburada">
           <div>
@@ -302,7 +307,7 @@
         </ul>
       </div>
 
-      <div class="exp-entry" id="exp-amadeus" style="--accent:var(--wisteria)">
+      <div class="exp-entry" id="exp-amadeus" tabindex="-1" style="--accent:var(--wisteria)">
         <div class="exp-head">
           <img class="co-logo" src="images/amadeus.png" alt="Amadeus">
           <div>
@@ -324,7 +329,7 @@
         </ul>
       </div>
 
-      <div class="exp-entry" id="exp-vodafone" style="--accent:var(--wisteria-lt)">
+      <div class="exp-entry" id="exp-vodafone" tabindex="-1" style="--accent:var(--wisteria-lt)">
         <div class="exp-head">
           <img class="co-logo" src="images/vodafone.png" alt="Vodafone">
           <div>
@@ -338,7 +343,7 @@
         </ul>
       </div>
 
-      <div class="exp-entry" id="exp-renault" style="--accent:var(--plum-mid)">
+      <div class="exp-entry" id="exp-renault" tabindex="-1" style="--accent:var(--plum-mid)">
         <div class="exp-head">
           <img class="co-logo" src="images/renault-group.png" alt="Renault Group">
           <div>
@@ -353,7 +358,7 @@
         </ul>
       </div>
 
-      <div class="exp-entry" id="exp-learning-assistant" style="--accent:var(--plum-deep)">
+      <div class="exp-entry" id="exp-learning-assistant" tabindex="-1" style="--accent:var(--plum-deep)">
         <div class="exp-head">
           <img class="co-logo" src="images/sabanci.png" alt="Sabancı University">
           <div>
@@ -368,7 +373,7 @@
       </div>
     </div>
 
-    <div class="view" data-view="capstone">
+    <div class="view" data-view="graduation-project" id="graduation-project" tabindex="-1" role="region" aria-label="Graduation project">
       <div class="panel-head"><p class="kicker">Graduation project</p><h1>A year on one problem</h1></div>
       <h2>Privacy-preserving MQTT messaging</h2>
       <p class="meta">Sabancı University · Sep 2022 – Jun 2023</p>
@@ -394,7 +399,7 @@
       </div>
     </div>
 
-    <div class="view" data-view="projects">
+    <div class="view" data-view="projects" id="projects" tabindex="-1" role="region" aria-label="Side projects">
       <div class="panel-head"><p class="kicker">Side projects</p><h1>What I build for fun</h1></div>
       <h2>What We'll Watch Tonight</h2>
       <p class="meta">Spring Boot · Vue · Jsoup — shipped</p>
@@ -432,7 +437,7 @@
       <div class="doc-links tight"><a href="https://github.com/bilgesucakir/shaker" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
     </div>
 
-    <div class="view" data-view="tools">
+    <div class="view" data-view="tools" id="tools" tabindex="-1" role="region" aria-label="Tools">
       <div class="panel-head"><p class="kicker">Tools</p><h1>What I build with</h1></div>
       <h2>Languages</h2>
       <div class="chips">
@@ -482,7 +487,7 @@
       </div>
     </div>
 
-    <div class="view" data-view="hobbies">
+    <div class="view" data-view="hobbies" id="hobbies" tabindex="-1" role="region" aria-label="Off the clock">
       <div class="panel-head"><p class="kicker">Off the clock</p><h1>Beyond the code</h1></div>
 
       <h2>Flute</h2>
@@ -535,10 +540,10 @@
       </div>
     </div>
 
-    <div class="view" data-view="volunteer">
+    <div class="view" data-view="volunteer" id="volunteer" tabindex="-1" role="region" aria-label="Volunteer">
       <div class="panel-head"><p class="kicker">Volunteer</p><h1>Time given away</h1></div>
 
-      <div class="exp-entry" id="vol-makeawish" style="--accent:var(--mauve)">
+      <div class="exp-entry" id="vol-makeawish" tabindex="-1" style="--accent:var(--mauve)">
         <div class="exp-head">
           <img class="co-logo" src="images/makeawish.png" alt="Make-A-Wish Türkiye">
           <div>
@@ -551,7 +556,7 @@
         </ul>
       </div>
 
-      <div class="exp-entry" id="vol-civic" style="--accent:var(--wisteria)">
+      <div class="exp-entry" id="vol-civic" tabindex="-1" style="--accent:var(--wisteria)">
         <div class="exp-head">
           <img class="co-logo co-logo-round" src="images/cip.jpeg" alt="Civic Involvement Projects">
           <div>
@@ -572,7 +577,7 @@
   const tracks=[
     {id:'about',label:'About me'},  
     {id:'education',label:'Education'},
-    {id:'capstone',label:'Graduation project'},
+    {id:'graduation-project',label:'Graduation project'},
     {id:'experience',label:'Experience',children:[
       {label:'Hepsiburada — SDE',anchor:'exp-hepsiburada'},
       {label:'Amadeus — SDE',anchor:'exp-amadeus'},
@@ -588,22 +593,29 @@
     ]},
     {id:'hobbies',label:'Off the clock'}
   ];
-  let cursor=0, current=0;
+  let cursor=0;
   let level='root'; // 'root' or {parentIndex, items}
+  let pendingFocus=false;
   const list=document.getElementById('menuList');
+  const nav=document.querySelector('nav.menu');
+  const wheel=document.querySelector('.wheel');
+  const srStatus=document.getElementById('srStatus');
 
   function items(){ return level==='root' ? tracks : level.items; }
 
   function renderMenu(){
-    list.innerHTML=items().map((t,i)=>
-      `<li class="${i===cursor?'sel':''}">${t.label}<span class="arrow">${t.children?'▸':'›'}</span></li>`).join('');
-    // keep highlighted item visible in the small screen
-    const sel=list.querySelector('.sel');
+    list.innerHTML=items().map((t,i)=>{
+      const href = level==='root' ? t.id : t.anchor;
+      const cur = i===cursor ? ' aria-current="true"' : '';
+      return `<li><a href="#${href}" tabindex="${i===cursor?0:-1}"${cur}>${t.label}`
+           + `<span class="arrow" aria-hidden="true">${t.children?'▸':'›'}</span></a></li>`;
+    }).join('');
+    const sel=list.querySelector('[aria-current]');
     if(sel) sel.scrollIntoView({block:'nearest'});
   }
-  function select(i){
-    current=i;
+  function showView(i){
     document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.dataset.view===tracks[i].id));
+    if(srStatus) srStatus.textContent='Section: '+tracks[i].label;
   }
   function highlightAnchor(id){
     const el=document.getElementById(id);
@@ -612,20 +624,77 @@
     el.classList.add('flash');
     setTimeout(()=>el.classList.remove('flash'),1200);
   }
-  function enter(){
-    const list_=items(), item=list_[cursor];
-    if(level==='root'){
-      if(item.children){
-        level={parentIndex:cursor,items:item.children};
-        cursor=0;
-        select(level.parentIndex);
-        renderMenu();
-      } else {
-        select(cursor);
+  function focusTarget(id){
+    const el=document.getElementById(id);
+    if(el) el.focus({preventScroll:true});
+  }
+
+  // --- hash routing: the URL fragment is the source of truth ---
+  function resolveHash(h){
+    if(!h) return null;
+    const vi=tracks.findIndex(t=>t.id===h);
+    if(vi>=0) return {viewIndex:vi, drillIn:!!tracks[vi].children};
+    for(let i=0;i<tracks.length;i++){
+      const kids=tracks[i].children;
+      if(kids){
+        const ai=kids.findIndex(k=>k.anchor===h);
+        if(ai>=0) return {viewIndex:i, submenuIndex:ai, anchor:h};
       }
+    }
+    return null;
+  }
+  function applyRoute(r){
+    if(!r) return;
+    if(r.submenuIndex!=null){
+      showView(r.viewIndex);
+      level={parentIndex:r.viewIndex, items:tracks[r.viewIndex].children};
+      cursor=r.submenuIndex;
+      renderMenu();
+      highlightAnchor(r.anchor);
+    } else if(r.drillIn){
+      showView(r.viewIndex);
+      level={parentIndex:r.viewIndex, items:tracks[r.viewIndex].children};
+      cursor=0;
+      renderMenu();
     } else {
-      select(level.parentIndex);
-      if(item.anchor) highlightAnchor(item.anchor);
+      showView(r.viewIndex);
+      level='root';
+      cursor=r.viewIndex;
+      renderMenu();
+    }
+  }
+
+  window.addEventListener('hashchange',()=>{
+    const h=decodeURIComponent(location.hash.slice(1));
+    if(!h){ level='root'; cursor=0; renderMenu(); showView(0); pendingFocus=false; return; }
+    const r=resolveHash(h);
+    if(!r) return;
+    applyRoute(r);
+    if(pendingFocus){ focusTarget(r.anchor || tracks[r.viewIndex].id); pendingFocus=false; }
+  });
+
+  // menu links drive the hash; keyboard/pointer users then land inside the section
+  nav.addEventListener('click',e=>{
+    const a=e.target.closest('a'); if(!a) return;
+    e.preventDefault();
+    const h=a.getAttribute('href').slice(1);
+    if('#'+h===location.hash){
+      const r=resolveHash(h);
+      if(r){ applyRoute(r); focusTarget(r.anchor || tracks[r.viewIndex].id); }
+    } else {
+      pendingFocus=true;
+      location.hash=h;
+    }
+  });
+
+  // wheel controls
+  function enter(){
+    const item=items()[cursor];
+    const h = level==='root' ? item.id : item.anchor;
+    if('#'+h===location.hash){
+      const r=resolveHash(h); if(r) applyRoute(r);
+    } else {
+      location.hash=h;
     }
   }
   function back(){
@@ -634,29 +703,36 @@
       level='root';
       renderMenu();
     } else {
-      cursor=0; renderMenu(); select(0);
+      history.replaceState(null,'',location.pathname+location.search);
+      cursor=0; renderMenu(); showView(0);
     }
   }
   function move(d){
     const n=items().length;
+    const hadFocus=list.contains(document.activeElement);
     cursor=(cursor+d+n)%n;
     renderMenu();
+    if(hadFocus){ const el=list.querySelector('[aria-current]'); if(el) el.focus(); }
   }
+
   document.getElementById('btnNext').onclick=()=>move(1);
   document.getElementById('btnPrev').onclick=()=>move(-1);
   document.getElementById('btnCenter').onclick=()=>enter();
   document.getElementById('btnPlay').onclick=()=>enter();
   document.getElementById('btnMenu').onclick=()=>back();
-  document.querySelector('.menu').addEventListener('click',e=>{
-    const li=e.target.closest('li'); if(!li)return;
-    cursor=[...list.children].indexOf(li); renderMenu(); enter();
-  });
+
   document.addEventListener('keydown',e=>{
+    const scope = list.contains(document.activeElement) || wheel.contains(document.activeElement) || document.activeElement===document.body;
+    if(!scope) return;
     if(e.key==='ArrowDown'){e.preventDefault();move(1)}
-    if(e.key==='ArrowUp'){e.preventDefault();move(-1)}
-    if(e.key==='Enter'&&document.activeElement===document.body){enter()}
+    else if(e.key==='ArrowUp'){e.preventDefault();move(-1)}
+    else if(e.key==='Enter'&&document.activeElement===document.body){enter()}
   });
-  renderMenu();select(0);
+
+  renderMenu();
+  const initial=resolveHash(decodeURIComponent(location.hash.slice(1)));
+  if(initial){ applyRoute(initial); }
+  else { showView(0); if(location.hash) history.replaceState(null,'',location.pathname+location.search); }
 
   const themeBtn=document.getElementById('themeBtn');
   themeBtn.onclick=()=>{
