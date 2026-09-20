@@ -150,11 +150,16 @@
   /* Tags are labels, not controls: square-ish, borderless, no hover affordance. */
   .chip{display:inline-flex;align-items:center;font-size:.82rem;padding:5px 12px;border-radius:7px;
     background:var(--paper-dim);color:var(--ink-soft);border:none}
+  /* marks a project as finished, next to its title — the one deliberate break from the purple
+     palette, so "shipped" reads as a status rather than blending into the theme's own accents */
+  .shipped-badge{display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:600;
+    line-height:1;letter-spacing:.02em;text-transform:uppercase;padding:4px 9px 3px 7px;border-radius:999px;
+    background:#57c785;color:#fff;vertical-align:middle;margin-left:9px;position:relative;top:-1px}
+  .shipped-badge svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:3;
+    stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
   .chip:has(img){gap:8px;padding-left:9px}
   .chip img{flex:0 0 auto;width:18px;height:18px;object-fit:contain}
   .chip img.flag{width:21px;height:14px;object-fit:cover;border-radius:2px;border:1px solid var(--line)}
-  .chip.flag-only{padding:7px 9px}
-  .chip.flag-only img.flag{width:26px;height:17px}
   /* Links are controls: solid buttons, so they can't be mistaken for the flat tags above. */
   .doc-links{display:flex;flex-wrap:wrap;gap:11px;margin-top:30px}
   .doc-links a{display:inline-flex;align-items:center;gap:7px;font-size:.88rem;padding:7px 13px;border-radius:999px;
@@ -169,8 +174,11 @@
   .doc-links a[href="#"]:hover{background:transparent;color:var(--ink-soft)}
   .doc-links a[href="#"]::after{content:'— add link';font-size:.78rem;opacity:.7}
   .doc-links.tight{margin-top:14px;margin-bottom:2px}
+  /* side-project links: plain icon + text, no button chrome */
+  .doc-links.tight a{background:none;padding:0;border-radius:0;color:var(--ink)}
+  .doc-links.tight a:hover{background:none;color:var(--plum-deep);transform:translateX(3px)}
   .gh-icon{width:16px;height:16px;fill:currentColor;flex:0 0 auto}
-  .live-icon{width:16px;height:16px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .live-icon{width:15px;height:15px;flex:0 0 auto;fill:currentColor}
   /* Kafka's mark is solid black — flip it white so it doesn't vanish on the dark theme */
   [data-theme="dark"] .chip img.mono{filter:invert(1)}
   .view{display:none;animation:fadein .45s cubic-bezier(.22,.61,.36,1)}
@@ -199,7 +207,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="gh-mark" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></symbol>
-  <symbol id="live-mark" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4 10 14M10 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-4"/></symbol>
+  <symbol id="live-mark" viewBox="0 0 512 512"><path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.4c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 20.9 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"/></symbol>
 </svg>
 <div class="ambient"><div class="blob b1"></div><div class="blob b2"></div></div>
 <div class="top-bar">
@@ -249,16 +257,6 @@
               <svg viewBox="0 0 24 24" fill="#0A66C2" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.47-.9 1.63-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zm1.78 13.02H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
             <span>bilgesucakir</span>
             </a>
-            <a href="https://www.instagram.com/a_crocheters_diary/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
-              <svg class="stroke" viewBox="0 0 24 24" stroke="url(#ig)" aria-hidden="true">
-                <defs><linearGradient id="ig" x1="0" y1="1" x2="1" y2="0">
-                  <stop offset="0" stop-color="#FDCB52"/><stop offset=".45" stop-color="#EE2A7B"/><stop offset="1" stop-color="#6228D7"/>
-                </linearGradient></defs>
-                <rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><circle cx="12" cy="12" r="4.1"/>
-                <circle cx="17.6" cy="6.4" r="1.2" fill="url(#ig)" stroke="none"/>
-              </svg>
-            <span>a_crocheters_diary</span>
-            </a>
           </div>
         </div>
       </div>
@@ -295,7 +293,7 @@
           <img class="co-logo" src="images/hepsiburada.png" alt="Hepsiburada">
           <div>
             <h2>Software Development Engineer</h2>
-            <p class="meta">Hepsiburada · Aug 2026 - Current</p>
+            <p class="meta">Hepsiburada, Istanbul · Aug 2026 - Current · <span class="duration-live" data-start="2026-08"></span></p>
           </div>
         </div>
         <ul class="bullets">
@@ -312,7 +310,7 @@
           <img class="co-logo" src="images/amadeus.png" alt="Amadeus">
           <div>
             <h2>Software Development Engineer</h2>
-            <p class="meta">Amadeus, Istanbul · Feb 2024 – Jun 2026</p>
+            <p class="meta">Amadeus, Istanbul · Feb 2024 – Jun 2026 · 2 yrs 5 mo</p>
           </div>
         </div>
         <div class="role-rows">
@@ -334,7 +332,7 @@
           <img class="co-logo" src="images/vodafone.png" alt="Vodafone">
           <div>
             <h2>Long Term Intern</h2>
-            <p class="meta">Vodafone, Istanbul · Feb 2023 – Jul 2023</p>
+            <p class="meta">Vodafone, Istanbul · Feb 2023 – Jul 2023 · 6 months</p>
           </div>
         </div>
         <ul class="bullets">
@@ -348,7 +346,7 @@
           <img class="co-logo" src="images/renault-group.png" alt="Renault Group">
           <div>
             <h2>Information Systems Intern</h2>
-            <p class="meta">Oyak-Renault, Bursa · Jul 2022 – Sep 2022</p>
+            <p class="meta">Oyak-Renault, Bursa · Jul 2022 – Sep 2022 · 3 months</p>
           </div>
         </div>
         <ul class="bullets">
@@ -363,7 +361,7 @@
           <img class="co-logo" src="images/sabanci.png" alt="Sabancı University">
           <div>
             <h2>Learning Assistant</h2>
-            <p class="meta">Sabancı University · Oct 2021 – Jun 2022</p>
+            <p class="meta">Sabancı University, Istanbul · Oct 2021 – Jun 2022 · 9 months</p>
           </div>
         </div>
         <ul class="bullets">
@@ -401,49 +399,49 @@
 
     <div class="view" data-view="projects" id="projects" tabindex="-1" role="region" aria-label="Side projects">
       <div class="panel-head"><p class="kicker">Side projects</p><h1>What I build for fun</h1></div>
-      <h2>What We'll Watch Tonight</h2>
-      <p class="meta">Spring Boot · Vue · Jsoup — shipped</p>
+      <h2>What We'll Watch Tonight <span class="shipped-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>Shipped</span></h2>
+      <p class="meta">Spring Boot · Vue · Jsoup</p>
       <p>Compares 2–4 people's Letterboxd watchlists and returns the films everyone already wants to see, linking straight back to each film's page.</p>
       <div class="doc-links tight"><a href="https://what-we-will-watch-tonight.onrender.com/" target="_blank" rel="noopener"><svg class="live-icon"><use href="#live-mark"/></svg>Live site</a><a href="https://github.com/bilgesucakir/what-we-will-watch-tonight" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
       <div class="rule"></div>
-      <h2>veni-vidi-emi</h2>
-      <p class="meta">Spring Boot · Vue · Leaflet — early stage</p>
-      <p>"I came, I saw, I bought" — a map-based aggregator pulling secondhand listings from Sahibinden, Dolap and others, plotted by area.</p>
-      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/veni-vidi-emi" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
-      <div class="rule"></div>
-      <h2>stitch-grapher</h2>
-      <p class="meta">Java · Spring Boot · Treejs — shipped</p>
+      <h2>stitch-grapher <span class="shipped-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>Shipped</span></h2>
+      <p class="meta">Java · Spring Boot · Treejs · Cytoscape</p>
       <p>Parses text crochet patterns — repeats, increases, decreases, magic rings — into a stitch connectivity graph, then lays it out as a 2D or 3D visualization.</p>
       <div class="doc-links tight"><a href="https://stitch-grapher.onrender.com" target="_blank" rel="noopener"><svg class="live-icon"><use href="#live-mark"/></svg>Live site</a><a href="https://github.com/bilgesucakir/stitch-grapher" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
       <div class="rule"></div>
-      <h2>stitch-modeller</h2>
-      <p class="meta">Java — concept stage</p>
-      <p>stitch-grapher's planned sequel: a comprehensive 3D modeller that takes the connectivity graph as input and renders the piece in three dimensions.</p>
-      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/stitch-modeller" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
-      <div class="rule"></div>
-      <h2>account-singularity</h2>
-      <p class="meta">TypeScript extension — in progress</p>
-      <p>One master identity for signing up everywhere else, backed by an encrypted vault.</p>
-      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/account-singularity-extension" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
-      <div class="rule"></div>
-      <h2>Jetlag Reset</h2>
-      <p class="meta">Concept stage</p>
-      <p>Reads flight details from your calendar and builds a sleep, rest and meal-timing plan around the trip.</p>
-      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/jetlag-reset" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
-      <div class="rule"></div>
-      <h2>Shaker</h2>
-      <p class="meta">Spring Boot · Vue 3 · MongoDB — early stage</p>
-      <p>A cocktail app: recipes, guidelines, a personal diary, sociallizing and events</p>
-      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/shaker" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
-      <div class="rule"></div>
       <h2>Wingmark</h2>
       <p class="meta">Java · Spring Boot · Swift — in progress</p>
-      <p>A personal bird-logging iOS app. Log a sighting with photo, species, life stage, gender, location and notes, browse past logs on a map, look species up in a guide with photos and live call/song recordings, and earn badges along the way. Personal-only for now — every user sees just their own logs.</p>
+      <p>A personal bird-logging iOS app. Log a sighting with photo, species, life stage, gender, location and notes, browse past logs on a map, look species up in a guide with photos and live call/song recordings, and earn badges along the way.</p>
       <div class="doc-links tight">
         <a href="https://github.com/bilgesucakir/wingmark" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>iOS app</a>
         <a href="https://github.com/bilgesucakir/wingmark-backend" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Backend</a>
         <a href="https://wingmark-backend.onrender.com/swagger-ui/index.html" target="_blank" rel="noopener"><svg class="live-icon"><use href="#live-mark"/></svg>API docs</a>
       </div>
+      <div class="rule"></div>
+      <h2>veni-vidi-emi</h2>
+      <p class="meta">Spring Boot · Vue — early stage</p>
+      <p>"I came, I saw, I bought" — a map-based aggregator pulling secondhand listings from 2nd hand marketplaces, plotted by area.</p>
+      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/veni-vidi-emi" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
+      <div class="rule"></div>
+      <h2>Shaker</h2>
+      <p class="meta">Spring Boot · Vue 3 · MongoDB — early stage</p>
+      <p>A cocktail app: recipes, guidelines, a personal diary, socializing and events</p>
+      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/shaker" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
+      <div class="rule"></div>
+      <h2>account-singularity</h2>
+      <p class="meta">TypeScript — in progress</p>
+      <p>The ultimate extension. One master identity for signing up everywhere else, backed by an encrypted vault.</p>
+      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/account-singularity-extension" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
+      <div class="rule"></div>
+      <h2>Jetlag Reset</h2>
+      <p class="meta">Java — concept stage</p>
+      <p>Reads flight details from your calendar and builds a sleep, rest and meal-timing plan around the trip.</p>
+      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/jetlag-reset" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
+      <div class="rule"></div>
+      <h2>stitch-modeller</h2>
+      <p class="meta">Java — concept stage</p>
+      <p>stitch-grapher's planned sequel: a comprehensive 3D modeller that takes the connectivity graph as input and renders the piece in three dimensions.</p>
+      <div class="doc-links tight"><a href="https://github.com/bilgesucakir/stitch-modeller" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
     </div>
 
     <div class="view" data-view="tools" id="tools" tabindex="-1" role="region" aria-label="Tools">
@@ -499,54 +497,65 @@
     <div class="view" data-view="hobbies" id="hobbies" tabindex="-1" role="region" aria-label="Off the clock">
       <div class="panel-head"><p class="kicker">Off the clock</p><h1>Beyond the code</h1></div>
 
-      <h2>Flute</h2>
-      <p>Classically trained on flute for almost ten years, with 20+ live performances, even one abroad — this is where I rest my soul.</p>
-      <div class="rule"></div>
-
-      <h2>Fencing</h2>
-      <p>Was a fencer for 8+ years — national athlete, representing Türkiye at international tournaments.</p>
-      <div class="rule"></div>
-
       <h2>Crochet</h2>
       <p>One of my passions — I make bags, plushies, clothing, scarves and berets, one project at a time. Documented (slowly) on Instagram</p>
+      <div class="links">
+        <a href="https://www.instagram.com/a_crocheters_diary/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+          <svg class="stroke" viewBox="0 0 24 24" stroke="url(#ig-crochet)" aria-hidden="true">
+            <defs><linearGradient id="ig-crochet" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#FDCB52"/><stop offset=".45" stop-color="#EE2A7B"/><stop offset="1" stop-color="#6228D7"/>
+            </linearGradient></defs>
+            <rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><circle cx="12" cy="12" r="4.1"/>
+            <circle cx="17.6" cy="6.4" r="1.2" fill="url(#ig-crochet)" stroke="none"/>
+          </svg>
+        <span>a_crocheters_diary</span>
+        </a>
+      </div>
       <div class="rule"></div>
 
       <h2>Film</h2>
       <p>Enjoying arthouse, especially Mediterranean cinema — active on Letterboxd, which is what started the What We'll Watch Tonight project.</p>
       <div class="rule"></div>
 
-      <h2>Painting</h2>
-      <p>Acrylic painting, mostly small canvases.</p>
+      <h2>Flute</h2>
+      <p>Classically trained on flute for almost ten years, with 20+ live performances, even one abroad — this is where I rest my soul.</p>
       <div class="rule"></div>
 
-      <h2>Baking</h2>
-      <p>Like trying new recipes and seeing a dessert come together from scratch.</p>
-      <div class="rule"></div>
-
-      <h2>Birdwatching</h2>
-      <p>Amateur bird watcher, and owner of the cutest pacific parrotlet.</p>
+      <h2>Travel</h2>
+      <p>Love historical sightseeing. Countries visited so far:</p>
+      <div class="chips">
+        <span class="chip" title="Germany"><img class="flag" src="images/flags/de.png" alt="Germany">Frankfurt</span>
+        <span class="chip" title="Austria"><img class="flag" src="images/flags/at.png" alt="Austria">Vienna</span>
+        <span class="chip" title="Bulgaria"><img class="flag" src="images/flags/bg.png" alt="Bulgaria">Sofia, Plovdiv, Stara Zagora</span>
+        <span class="chip" title="France"><img class="flag" src="images/flags/fr.png" alt="France">Paris</span>
+        <span class="chip" title="Italy"><img class="flag" src="images/flags/it.png" alt="Italy">Rome</span>
+        <span class="chip" title="Hungary"><img class="flag" src="images/flags/hu.png" alt="Hungary">Budapest</span>
+        <span class="chip" title="Greece"><img class="flag" src="images/flags/gr.png" alt="Greece">Athens, Chios</span>
+      </div>
       <div class="rule"></div>
 
       <h2>Video games</h2>
       <p>Mostly a fan of action-adventure and roguelike games. My favorite lately is Red Dead Redemption 2.</p>
       <div class="rule"></div>
 
+      <h2>Birdwatching</h2>
+      <p>Amateur bird watcher, and owner of the cutest pacific parrotlet.</p>
+      <div class="rule"></div>
+
       <h2>Mixology</h2>
       <p>Trying out classical recipes as well as coming up with my own experimental ones.</p>
       <div class="rule"></div>
 
-      <h2>Travel</h2>
-      <p>Love historical sightseeing. Countries visited so far:</p>
-      <div class="chips">
-        <span class="chip flag-only" title="Germany"><img class="flag" src="images/flags/de.png" alt="Germany"></span>
-        <span class="chip flag-only" title="Austria"><img class="flag" src="images/flags/at.png" alt="Austria"></span>
-        <span class="chip flag-only" title="Belgium"><img class="flag" src="images/flags/be.png" alt="Belgium"></span>
-        <span class="chip flag-only" title="Bulgaria"><img class="flag" src="images/flags/bg.png" alt="Bulgaria"></span>
-        <span class="chip flag-only" title="France"><img class="flag" src="images/flags/fr.png" alt="France"></span>
-        <span class="chip flag-only" title="Italy"><img class="flag" src="images/flags/it.png" alt="Italy"></span>
-        <span class="chip flag-only" title="Hungary"><img class="flag" src="images/flags/hu.png" alt="Hungary"></span>
-        <span class="chip flag-only" title="Greece"><img class="flag" src="images/flags/gr.png" alt="Greece"></span>
-      </div>
+      <h2>Baking</h2>
+      <p>Like trying new recipes and seeing a dessert come together from scratch.</p>
+      <div class="rule"></div>
+
+      <h2>Painting</h2>
+      <p>Acrylic painting, mostly small canvases.</p>
+      <div class="rule"></div>
+
+      <h2>Fencing</h2>
+      <p>Was a fencer for 8+ years — national athlete, representing Türkiye at international tournaments.</p>
     </div>
 
     <div class="view" data-view="volunteer" id="volunteer" tabindex="-1" role="region" aria-label="Volunteer">
@@ -557,7 +566,7 @@
           <img class="co-logo" src="images/makeawish.png" alt="Make-A-Wish Türkiye">
           <div>
             <h2>Make-A-Wish Türkiye</h2>
-            <p class="meta">Volunteer · Jul 2026 - current</p>
+            <p class="meta">Volunteer · Jul 2026 - current · <span class="duration-live" data-start="2026-07"></span></p>
           </div>
         </div>
         <ul class="bullets">
@@ -570,7 +579,7 @@
           <img class="co-logo co-logo-round" src="images/cip.jpeg" alt="Civic Involvement Projects">
           <div>
             <h2>Civic Involvement Projects</h2>
-            <p class="meta">Sabancı University · Volunteer · Sep 2019 – Jan 2020</p>
+            <p class="meta">Sabancı University · Volunteer · Sep 2019 – Jan 2020 · 5 months</p>
           </div>
         </div>
         <ul class="bullets">
@@ -583,6 +592,21 @@
 </div>
 
 <script>
+  (function(){
+    function formatDuration(months){
+      const yrs=Math.floor(months/12), mo=months%12;
+      if(yrs===0) return `${mo} month${mo===1?'':'s'}`;
+      if(mo===0) return `${yrs} yr${yrs===1?'':'s'}`;
+      return `${yrs} yr${yrs===1?'':'s'} ${mo} mo`;
+    }
+    document.querySelectorAll('.duration-live').forEach(el=>{
+      const [y,m]=el.dataset.start.split('-').map(Number);
+      const now=new Date();
+      const months=(now.getFullYear()-y)*12+(now.getMonth()+1-m)+1;
+      el.textContent=formatDuration(months);
+    });
+  })();
+
   const tracks=[
     {id:'about',label:'About me'},  
     {id:'education',label:'Education'},
