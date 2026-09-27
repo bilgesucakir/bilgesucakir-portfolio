@@ -76,8 +76,20 @@
     background:radial-gradient(130% 65% at 28% -12%,rgba(255,255,255,.55),transparent 60%);
     opacity:.5;transition:opacity .4s}
   [data-theme="light"] .ipod::before{opacity:.16}
-  .screen{background:#f7f4ff;border-radius:8px;height:212px;padding:0;overflow:hidden;
+  .screen{position:relative;background:#f7f4ff;border-radius:8px;height:212px;padding:0;overflow:hidden;
     border:1px solid var(--device-bezel-border);box-shadow:inset 0 2px 8px rgba(44,38,64,.12);display:flex;flex-direction:column}
+  /* screen wipe — two black panels slide in from the sides to meet at center, and back out
+     again to reveal whatever's underneath. Used to transition the screen content itself,
+     independent of the iPod's physical fly-to-center move. */
+  .screen-wipe{position:absolute;inset:0;z-index:5;display:flex;pointer-events:none}
+  .screen-wipe .wipe-l,.screen-wipe .wipe-r{flex:1;background:#000;transition:transform .3s ease}
+  .screen-wipe .wipe-l{transform:translateX(-100%)}
+  .screen-wipe .wipe-r{transform:translateX(100%)}
+  .screen-wipe.closed .wipe-l,.screen-wipe.closed .wipe-r{transform:translateX(0)}
+  .screen-wipe .wipe-dot{position:absolute;top:50%;left:50%;width:6px;height:6px;margin:-3px 0 0 -3px;
+    border-radius:50%;background:#fff;opacity:0;transition:opacity .15s}
+  .screen-wipe.closed .wipe-dot{opacity:.5;animation:wipePulse 1s ease-in-out infinite}
+  @keyframes wipePulse{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.8);opacity:1}}
   .screen-bar{height:22px;flex:0 0 22px;background:linear-gradient(180deg,#eceaf0,#dcdbe2);
     display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:.62rem;color:var(--device-ink-soft)}
   .battery{position:relative;width:20px;height:10px;border:1px solid var(--device-ink-soft);border-radius:2px;display:inline-block}
@@ -194,6 +206,16 @@
   .theme-toggle{font:inherit;font-size:.76rem;padding:7px 15px;border-radius:999px;cursor:pointer;
     background:var(--paper-dim);color:var(--ink);border:1px solid var(--line);transition:background .25s,color .25s}
   .theme-toggle:hover{background:var(--mauve);color:var(--on-accent)}
+
+  /* ---- arcade mode (shell only — no game yet) ---- */
+  .arcade{position:fixed;inset:0;z-index:50;background:#000;display:flex;align-items:center;justify-content:center}
+  .arcade[hidden]{display:none}
+  .arcade-exit{position:fixed;top:20px;left:20px;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:#fff}
+  .arcade-exit:hover{background:var(--mauve);color:var(--on-accent);border-color:transparent}
+  .arcade-screen-msg{flex:1;display:flex;align-items:center;justify-content:center;
+    font-family:var(--sans);font-size:.85rem;color:var(--device-ink)}
+  /* the slide-in/out move is driven from JS (FLIP technique); this just makes transform changes glide */
+  .arcade .ipod{transition:transform .5s cubic-bezier(.22,.61,.36,1)}
 </style>
 </head>
 <body>
@@ -206,7 +228,36 @@
   <a class="icon-btn" href="https://github.com/bilgesucakir/bilgesucakir-portfolio" target="_blank" rel="noopener" aria-label="View this site's source on GitHub" title="Source on GitHub">
     <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
   </a>
+  <button class="icon-btn" id="arcadeBtn" aria-label="Play a game" title="Arcade">
+    <svg class="stroke" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/>
+      <line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/>
+      <circle cx="15" cy="13" r=".5" fill="currentColor" stroke="none"/><circle cx="18" cy="11" r=".5" fill="currentColor" stroke="none"/>
+    </svg>
+  </button>
   <button class="theme-toggle" id="themeBtn">☀ Light</button>
+</div>
+
+<!-- Arcade mode: placeholder shell for a future hidden game. Background is a flat black
+     stand-in until a real arcade background is chosen; only the iPod is shown. -->
+<div class="arcade" id="arcadeOverlay" hidden>
+  <button class="icon-btn arcade-exit" id="arcadeExitBtn" aria-label="Exit arcade">
+    <svg class="stroke" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+  </button>
+  <div class="ipod">
+    <div class="screen">
+      <div class="arcade-screen-msg">Start Game</div>
+      <div class="screen-wipe closed" aria-hidden="true"><span class="wipe-l"></span><span class="wipe-r"></span><span class="wipe-dot"></span></div>
+    </div>
+    <div class="wheel">
+      <button class="w-menu" type="button" tabindex="-1" aria-hidden="true">MENU</button>
+      <button class="w-prev" type="button" tabindex="-1" aria-hidden="true">◀◀</button>
+      <button class="w-next" type="button" tabindex="-1" aria-hidden="true">▶▶</button>
+      <button class="w-play" type="button" tabindex="-1" aria-hidden="true">▶‖</button>
+      <button class="center" type="button" tabindex="-1" aria-hidden="true"></button>
+    </div>
+    <p class="ipod-label">Use ◀◀ ▶▶ to browse, center to select</p>
+  </div>
 </div>
 
 <div class="stage">
@@ -215,6 +266,7 @@
     <div class="screen">
       <div class="screen-bar"><span id="nowTitle">Bilgesu Çakır Portfolio</span><span class="battery" aria-hidden="true"><span class="battery-fill"></span></span></div>
       <nav class="menu" aria-label="Portfolio sections"><ul id="menuList"></ul></nav>
+      <div class="screen-wipe" aria-hidden="true"><span class="wipe-l"></span><span class="wipe-r"></span><span class="wipe-dot"></span></div>
     </div>
     <div class="wheel">
       <button class="w-menu" id="btnMenu">MENU</button>
@@ -748,6 +800,80 @@
     document.documentElement.dataset.theme=dark?'light':'dark';
     themeBtn.textContent=dark?'☾ Dark':'☀ Light';
   };
+
+  // Arcade mode — shell only, no game wired up yet.
+  // The iPod itself doesn't move here — it's two separate elements (real + arcade
+  // placeholder). We FLIP: snap the arcade iPod to where the real one sits on screen,
+  // then let CSS transition it back to its natural centered spot. The screen content
+  // is a separate wipe effect (sides-to-center-to-black, then black-to-sides revealing
+  // the other screen) sequenced around that move: close real screen → fly → open arcade
+  // screen, and the reverse on exit.
+  const arcadeBtn=document.getElementById('arcadeBtn');
+  const arcadeOverlay=document.getElementById('arcadeOverlay');
+  const arcadeExitBtn=document.getElementById('arcadeExitBtn');
+  const arcadeIpod=arcadeOverlay.querySelector('.ipod');
+  const realIpod=document.querySelector('.stage .ipod');
+  const realScreen=realIpod.querySelector('.screen');
+  const arcadeScreen=arcadeIpod.querySelector('.screen');
+
+  function wipe(screenEl,close){
+    const w=screenEl.querySelector('.screen-wipe');
+    w.classList.toggle('closed',close);
+    return new Promise(res=>setTimeout(res,320));
+  }
+  function flyIn(rect){
+    return new Promise(res=>{
+      const cur=arcadeIpod.getBoundingClientRect();
+      arcadeIpod.style.transition='none';
+      arcadeIpod.style.transform=`translate(${rect.left-cur.left}px,${rect.top-cur.top}px)`;
+      arcadeIpod.offsetHeight; // force the snap in before re-enabling the transition
+      requestAnimationFrame(()=>{
+        arcadeIpod.style.transition='';
+        arcadeIpod.style.transform='translate(0,0)';
+        setTimeout(res,520);
+      });
+    });
+  }
+  function flyOut(rect){
+    return new Promise(res=>{
+      const cur=arcadeIpod.getBoundingClientRect();
+      arcadeIpod.style.transform=`translate(${rect.left-cur.left}px,${rect.top-cur.top}px)`;
+      let done=false;
+      const finish=()=>{ if(done) return; done=true; res(); };
+      arcadeIpod.addEventListener('transitionend',finish,{once:true});
+      setTimeout(finish,550); // fallback in case the transition never fires (e.g. reduced motion)
+    });
+  }
+
+  let animating=false;
+  arcadeBtn.onclick=async()=>{
+    if(animating) return; animating=true;
+    const r=realIpod.getBoundingClientRect();
+    await wipe(realScreen,true);
+    arcadeOverlay.hidden=false;
+    await new Promise(res=>requestAnimationFrame(res));
+    await flyIn(r);
+    await wipe(arcadeScreen,false);
+    animating=false;
+  };
+
+  arcadeExitBtn.onclick=async()=>{
+    if(animating) return; animating=true;
+    const r=realIpod.getBoundingClientRect();
+    await wipe(arcadeScreen,true);
+    await flyOut(r);
+    arcadeOverlay.hidden=true;
+    arcadeIpod.style.transition='none';
+    arcadeIpod.style.transform='translate(0,0)';
+    arcadeIpod.offsetHeight;
+    arcadeIpod.style.transition='';
+    await wipe(realScreen,false);
+    animating=false;
+  };
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape' && !arcadeOverlay.hidden) arcadeExitBtn.click();
+  });
 </script>
 </body>
 </html>
