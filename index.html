@@ -18,7 +18,7 @@
     /* device body — the silver/white classic; flips to the black classic in light mode for contrast */
     --device-body-a:#ffffff;--device-body-b:#e6e6ec;--device-body-border:rgba(20,18,30,.1);
     --device-bezel-border:rgba(20,18,30,.18);
-    --device-wheel-a:#ffffff;--device-wheel-b:#dedde3;--device-wheel-hover:rgba(20,18,30,.06);
+    --device-wheel-a:#ffffff;--device-wheel-b:#dedde3;--device-wheel-hover:rgba(20,18,30,.06);--device-wheel-active:rgba(20,18,30,.16);
     --device-center-a:#f7f7f9;--device-center-b:#d9d8de;
     --device-center-border:rgba(20,18,30,.06);--device-center-shadow:rgba(20,18,30,.12);
     --device-body-ink:#2c2640;--device-body-ink-soft:#5b5478;
@@ -35,7 +35,7 @@
   [data-theme="light"]{
     --device-body-a:#3c3944;--device-body-b:#131116;--device-body-border:rgba(255,255,255,.08);
     --device-bezel-border:rgba(255,255,255,.14);
-    --device-wheel-a:#332f3a;--device-wheel-b:#151319;--device-wheel-hover:rgba(255,255,255,.08);
+    --device-wheel-a:#332f3a;--device-wheel-b:#151319;--device-wheel-hover:rgba(255,255,255,.08);--device-wheel-active:rgba(255,255,255,.2);
     --device-center-a:#68606f;--device-center-b:#332f3a;
     --device-center-border:rgba(255,255,255,.22);--device-center-shadow:rgba(0,0,0,.4);
     --device-body-ink:#f1edfa;--device-body-ink-soft:#b6acd1;
@@ -68,7 +68,8 @@
   @media(max-width:860px){.stage{grid-template-columns:1fr;gap:36px;height:auto}}
 
   /* ---- iPod ---- */
-  .ipod{position:relative;width:284px;justify-self:center;transition:background .4s,border-color .4s;
+  .ipod-col{justify-self:center}
+  .ipod{position:relative;width:284px;transition:background .4s,border-color .4s;
     background:linear-gradient(160deg,var(--device-body-a),var(--device-body-b));border-radius:32px;padding:20px 20px 26px;
     box-shadow:0 22px 50px rgba(44,38,64,.22),inset 0 1px 0 rgba(255,255,255,.5);border:1px solid var(--device-body-border)}
   /* glossy top-left sheen — gives the plastic case some shading instead of a flat fill */
@@ -111,6 +112,8 @@
   .wheel button{position:absolute;background:none;border:none;cursor:pointer;color:var(--device-body-ink-soft);
     font-size:.68rem;letter-spacing:.06em;padding:8px 12px;border-radius:10px;transition:color .2s,background .2s}
   .wheel button:hover{color:var(--device-body-ink);background:var(--device-wheel-hover)}
+  .wheel button:active{color:var(--device-body-ink);background:var(--device-wheel-active);
+    box-shadow:inset 0 1px 4px rgba(0,0,0,.25)}
   .w-menu{top:6px;left:50%;transform:translateX(-50%)}
   .w-prev{left:2px;top:50%;transform:translateY(-50%);font-size:.95rem!important}
   .w-next{right:2px;top:50%;transform:translateY(-50%);font-size:.95rem!important}
@@ -120,7 +123,9 @@
     box-shadow:inset 0 1px 3px rgba(44,38,64,.16),0 1px 4px var(--device-center-shadow);
     transition:background .4s,border-color .4s,transform .15s}
   .center:hover{transform:scale(1.04)}
-  .ipod-label{text-align:center;font-size:.7rem;color:var(--device-body-ink-soft);margin-top:16px;transition:color .4s}
+  .center:active{transform:scale(.94);box-shadow:inset 0 2px 6px rgba(0,0,0,.35)}
+  .ipod-label{width:284px;margin:16px auto 0;text-align:center;font-size:.7rem;color:var(--ink-soft);
+    transition:color .4s;text-wrap:balance}
 
   /* ---- content panel ---- */
   .panel{min-height:0;height:100%;overflow-y:auto;padding-right:12px;scrollbar-gutter:stable}
@@ -256,26 +261,27 @@
       <button class="w-play" type="button" tabindex="-1" aria-hidden="true">▶‖</button>
       <button class="center" type="button" tabindex="-1" aria-hidden="true"></button>
     </div>
-    <p class="ipod-label">Use ◀◀ ▶▶ to browse, center to select</p>
   </div>
 </div>
 
 <div class="stage">
   <!-- iPOD -->
-  <div class="ipod">
-    <div class="screen">
-      <div class="screen-bar"><span id="nowTitle">Bilgesu Çakır Portfolio</span><span class="battery" aria-hidden="true"><span class="battery-fill"></span></span></div>
-      <nav class="menu" aria-label="Portfolio sections"><ul id="menuList"></ul></nav>
-      <div class="screen-wipe" aria-hidden="true"><span class="wipe-l"></span><span class="wipe-r"></span><span class="wipe-dot"></span></div>
+  <div class="ipod-col">
+    <div class="ipod">
+      <div class="screen">
+        <div class="screen-bar"><span id="nowTitle">Bilgesu Çakır Portfolio</span><span class="battery" aria-hidden="true"><span class="battery-fill"></span></span></div>
+        <nav class="menu" aria-label="Portfolio sections"><ul id="menuList"></ul></nav>
+        <div class="screen-wipe" aria-hidden="true"><span class="wipe-l"></span><span class="wipe-r"></span><span class="wipe-dot"></span></div>
+      </div>
+      <div class="wheel">
+        <button class="w-menu" id="btnMenu">MENU</button>
+        <button class="w-prev" id="btnPrev" aria-label="Previous">◀◀</button>
+        <button class="w-next" id="btnNext" aria-label="Next">▶▶</button>
+        <button class="w-play" id="btnPlay" aria-label="Select">▶‖</button>
+        <button class="center" id="btnCenter" aria-label="Select"></button>
+      </div>
     </div>
-    <div class="wheel">
-      <button class="w-menu" id="btnMenu">MENU</button>
-      <button class="w-prev" id="btnPrev" aria-label="Previous">◀◀</button>
-      <button class="w-next" id="btnNext" aria-label="Next">▶▶</button>
-      <button class="w-play" id="btnPlay" aria-label="Select">▶‖</button>
-      <button class="center" id="btnCenter" aria-label="Select"></button>
-    </div>
-    <p class="ipod-label">Use ◀◀ ▶▶ to browse, center to select</p>
+    <p class="ipod-label">Use ◀◀ ▶▶ to browse, center to select, MENU to go back</p>
   </div>
 
   <!-- PANEL -->
