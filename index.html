@@ -18,7 +18,7 @@
     /* device body — the silver/white classic; flips to the black classic in light mode for contrast */
     --device-body-a:#ffffff;--device-body-b:#e6e6ec;--device-body-border:rgba(20,18,30,.1);
     --device-bezel-border:rgba(20,18,30,.18);
-    --device-wheel-a:#ffffff;--device-wheel-b:#dedde3;--device-wheel-hover:rgba(20,18,30,.06);--device-wheel-active:rgba(20,18,30,.16);
+    --device-wheel-a:#ffffff;--device-wheel-b:#dedde3;--device-wheel-hover:rgba(20,18,30,.18);--device-wheel-active:rgba(20,18,30,.32);
     --device-center-a:#f7f7f9;--device-center-b:#d9d8de;
     --device-center-border:rgba(20,18,30,.06);--device-center-shadow:rgba(20,18,30,.12);
     --device-body-ink:#2c2640;--device-body-ink-soft:#5b5478;
@@ -35,7 +35,7 @@
   [data-theme="light"]{
     --device-body-a:#3c3944;--device-body-b:#131116;--device-body-border:rgba(255,255,255,.08);
     --device-bezel-border:rgba(255,255,255,.14);
-    --device-wheel-a:#332f3a;--device-wheel-b:#151319;--device-wheel-hover:rgba(255,255,255,.08);--device-wheel-active:rgba(255,255,255,.2);
+    --device-wheel-a:#332f3a;--device-wheel-b:#151319;--device-wheel-hover:rgba(255,255,255,.22);--device-wheel-active:rgba(255,255,255,.4);
     --device-center-a:#68606f;--device-center-b:#332f3a;
     --device-center-border:rgba(255,255,255,.22);--device-center-shadow:rgba(0,0,0,.4);
     --device-body-ink:#f1edfa;--device-body-ink-soft:#b6acd1;
@@ -111,8 +111,11 @@
     box-shadow:0 3px 10px rgba(44,38,64,.16),inset 0 1px 0 rgba(255,255,255,.4);border:1px solid var(--device-body-border)}
   .wheel button{position:absolute;background:none;border:none;cursor:pointer;color:var(--device-body-ink-soft);
     font-size:.68rem;letter-spacing:.06em;padding:8px 12px;border-radius:10px;transition:color .2s,background .2s}
-  .wheel button:hover{color:var(--device-body-ink);background:var(--device-wheel-hover)}
-  .wheel button:active{color:var(--device-body-ink);background:var(--device-wheel-active);
+  /* soft glow that fades toward the box edges, rather than a flat hard-edged fill */
+  .wheel button:hover{color:var(--device-body-ink);
+    background:radial-gradient(ellipse at center,var(--device-wheel-hover) 0%,transparent 85%)}
+  .wheel button:active{color:var(--device-body-ink);
+    background:radial-gradient(ellipse at center,var(--device-wheel-active) 0%,transparent 85%);
     box-shadow:inset 0 1px 4px rgba(0,0,0,.25)}
   .w-menu{top:6px;left:50%;transform:translateX(-50%)}
   .w-prev{left:2px;top:50%;transform:translateY(-50%);font-size:.95rem!important}
