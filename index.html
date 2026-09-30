@@ -23,13 +23,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --plum-deep:#887caf;--plum-mid:#9688c0;--wisteria:#a596d3;--wisteria-lt:#b6a5e8;
-    --mauve:#c8b6ff;--periwinkle:#cdbdff;
+    /* one purple, two jobs: --accent for text, links, buttons and borders (4.6:1 on paper);
+       --accent-soft for hover fills and the background glow */
+    --accent:#6a5c97;--accent-soft:#c8b6ff;
     --ink:#2c2640;--ink-soft:#5b5478;--paper:#e9e2f8;--paper-dim:#ded4f1;
-    --line:rgba(136,124,175,.28);--on-accent:#2c2640;--on-plum:#ffffff;--gh:#181717;
+    --line:rgba(106,92,151,.26);--on-accent-soft:#2c2640;--on-accent:#ffffff;--gh:#181717;
     --thumb:rgba(136,124,175,.4);
     /* device screen (LCD) keeps its own ink — always dark-on-light, like a real display */
-    --device-ink:#2c2640;--device-ink-soft:#5b5478;
+    --device-ink:#2c2640;--device-ink-soft:#5b5478;--device-select:#6a5c97;
     /* device body — the silver/white classic; flips to the black classic in light mode for contrast */
     --device-body-a:#ffffff;--device-body-b:#e6e6ec;--device-body-border:rgba(20,18,30,.1);
     --device-bezel-border:rgba(20,18,30,.18);
@@ -38,13 +39,13 @@
     --device-center-border:rgba(20,18,30,.06);--device-center-shadow:rgba(20,18,30,.12);
     --device-body-ink:#2c2640;--device-body-ink-soft:#5b5478;
     /* corner glow — light and dark themes need opposite-direction shading to read against their own background */
-    --blob1:var(--mauve);--blob1-op:.22;--blob2:var(--wisteria-lt);--blob2-op:.18;
+    --blob1:var(--accent-soft);--blob1-op:.22;--blob2:var(--accent-soft);--blob2-op:.16;
     --serif:'Fraunces',serif;--sans:'Sora',system-ui,sans-serif;
   }
   [data-theme="dark"]{color-scheme:dark;
-    --plum-deep:#bdabee;
+    --accent:#bdabee;
     --ink:#ece8f8;--ink-soft:#a79dc4;--paper:#1e1a2c;--paper-dim:#2b2440;
-    --line:rgba(181,166,232,.24);--on-plum:#241f33;--gh:#ffffff;
+    --line:rgba(181,166,232,.24);--on-accent:#241f33;--gh:#ffffff;
     --thumb:rgba(181,166,232,.3);
   }
   [data-theme="light"]{color-scheme:light;
@@ -66,11 +67,11 @@
   html::-webkit-scrollbar,.panel::-webkit-scrollbar{display:none}
   @media(min-width:861px){html,body{height:100%;overflow:hidden}}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-  a{color:var(--plum-deep)}
-  button:focus-visible{outline:2px solid var(--plum-deep);outline-offset:3px}
+  a{color:var(--accent)}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   .view:focus{outline:none}
   .skip-link{position:fixed;top:12px;left:12px;z-index:10;padding:8px 14px;border-radius:999px;font-size:.85rem;
-    background:var(--plum-deep);color:var(--on-plum);text-decoration:none;transform:translateY(-200%)}
+    background:var(--accent);color:var(--on-accent);text-decoration:none;transform:translateY(-200%)}
   .skip-link:focus-visible{transform:none;outline:2px solid var(--ink);outline-offset:2px}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
@@ -107,8 +108,8 @@
   .menu li{list-style:none}
   .menu li a{padding:6px 12px;font-size:.8rem;display:flex;justify-content:space-between;
     color:var(--device-ink);text-decoration:none;transition:background .15s,color .15s}
-  .menu li a[aria-current]{background:linear-gradient(180deg,var(--wisteria-lt),var(--plum-mid));color:#fff}
-  .menu li a:focus-visible{outline:2px solid var(--plum-deep);outline-offset:-2px}
+  .menu li a[aria-current]{background:linear-gradient(180deg,#7c6ab0,var(--device-select));color:#fff}
+  .menu li a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   .menu li a .arrow{opacity:.5;font-size:.7rem}
   .menu li a[aria-current] .arrow{opacity:.9}
 
@@ -170,11 +171,11 @@
   .hobby p{margin-top:4px}
   @media(max-width:860px){.hobby-grid{grid-template-columns:1fr}}
   .panel p{color:var(--ink-soft);max-width:58ch;margin:8px 0 0;font-size:.97rem}
-  .panel .meta{font-size:.83rem;color:var(--plum-deep);margin-top:2px}
+  .panel .meta{font-size:.83rem;color:var(--accent);margin-top:2px}
   .panel ul.bullets{margin:10px 0 0;padding-left:1.1em;color:var(--ink-soft);font-size:.95rem}
   .panel ul.bullets li{margin-bottom:5px}
   .rule{height:1px;background:var(--line);margin:22px 0}
-  .exp-entry{--accent:var(--wisteria);padding-left:16px;border-left:3px solid var(--accent);margin-bottom:24px;
+  .exp-entry{padding-left:16px;border-left:3px solid var(--accent);margin-bottom:24px;
     border-radius:0 8px 8px 0;transition:background .3s}
   .exp-entry h2{margin-top:0}
   .exp-head{display:flex;align-items:center;gap:14px}
@@ -197,9 +198,9 @@
   /* Links are controls: solid buttons, so they can't be mistaken for the flat tags above. */
   .doc-links{display:flex;flex-wrap:wrap;gap:11px;margin-top:30px}
   .doc-links a{display:inline-flex;align-items:center;gap:7px;font-size:.88rem;padding:7px 13px;border-radius:999px;
-    text-decoration:none;background:var(--plum-deep);color:var(--on-plum);border:none;
+    text-decoration:none;background:var(--accent);color:var(--on-accent);border:none;
     transition:background .25s,color .25s,transform .25s}
-  .doc-links a:hover{background:var(--mauve);color:var(--on-accent);transform:translateY(-2px)}
+  .doc-links a:hover{background:var(--accent-soft);color:var(--on-accent-soft);transform:translateY(-2px)}
   .doc-links .hint{opacity:.72;font-size:.79rem}
   .doc-links svg{width:16px;height:16px;fill:currentColor;flex:0 0 auto}
   .doc-links svg.stroke{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -210,7 +211,7 @@
   .doc-links.tight{margin-top:14px;margin-bottom:2px}
   /* side-project links: plain icon + text, no button chrome */
   .doc-links.tight a{background:none;padding:0;border-radius:0;color:var(--ink)}
-  .doc-links.tight a:hover{background:none;color:var(--plum-deep);transform:translateX(3px)}
+  .doc-links.tight a:hover{background:none;color:var(--accent);transform:translateX(3px)}
   .gh-icon{width:16px;height:16px;fill:currentColor;flex:0 0 auto}
   .live-icon{width:15px;height:15px;flex:0 0 auto;fill:currentColor}
   /* Kafka's mark is solid black — flip it white so it doesn't vanish on the dark theme */
@@ -221,7 +222,7 @@
   .links{display:flex;flex-direction:column;align-items:flex-start;gap:11px;margin-top:22px}
   .links a{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);
     font-size:.89rem;transition:color .2s,transform .2s}
-  .links a:hover{color:var(--plum-deep);transform:translateX(3px)}
+  .links a:hover{color:var(--accent);transform:translateX(3px)}
   .links svg{display:block;width:19px;height:19px;flex:0 0 auto}
   .links svg.stroke{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .links svg.gh{fill:var(--gh)}
@@ -232,12 +233,12 @@
   .icon-btn{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;font:inherit;
     background:var(--paper-dim);color:var(--ink);border:1px solid var(--line);cursor:pointer;
     transition:background .25s,color .25s}
-  .icon-btn:hover{background:var(--mauve);color:var(--on-accent)}
+  .icon-btn:hover{background:var(--accent-soft);color:var(--on-accent-soft)}
   .icon-btn svg{display:block;width:17px;height:17px;fill:currentColor}
   .icon-btn svg.stroke{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   .theme-toggle{font:inherit;font-size:.76rem;padding:7px 15px;border-radius:999px;cursor:pointer;
     background:var(--paper-dim);color:var(--ink);border:1px solid var(--line);transition:background .25s,color .25s}
-  .theme-toggle:hover{background:var(--mauve);color:var(--on-accent)}
+  .theme-toggle:hover{background:var(--accent-soft);color:var(--on-accent-soft)}
 </style>
 </head>
 <body>
@@ -327,7 +328,7 @@
     <div class="view" data-view="experience" id="experience" tabindex="-1" role="region" aria-label="Experience">
       <div class="panel-head"><h1>Where I've worked</h1></div>
 
-      <div class="exp-entry" id="exp-hepsiburada" tabindex="-1" style="--accent:var(--mauve)">
+      <div class="exp-entry" id="exp-hepsiburada" tabindex="-1">
         <div class="exp-head">
           <img class="co-logo" src="images/hepsiburada.png" width="32" height="32" loading="lazy" alt="Hepsiburada">
           <div>
@@ -344,7 +345,7 @@
         </ul>
       </div>
 
-      <div class="exp-entry" id="exp-amadeus" tabindex="-1" style="--accent:var(--wisteria)">
+      <div class="exp-entry" id="exp-amadeus" tabindex="-1">
         <div class="exp-head">
           <img class="co-logo" src="images/amadeus.png" width="180" height="180" loading="lazy" alt="Amadeus">
           <div>
@@ -366,7 +367,7 @@
         </ul>
       </div>
 
-      <div class="exp-entry" id="exp-vodafone" tabindex="-1" style="--accent:var(--wisteria-lt)">
+      <div class="exp-entry" id="exp-vodafone" tabindex="-1">
         <div class="exp-head">
           <img class="co-logo" src="images/vodafone.png" width="180" height="180" loading="lazy" alt="Vodafone">
           <div>
@@ -380,7 +381,7 @@
         </ul>
       </div>
 
-      <div class="exp-entry" id="exp-renault" tabindex="-1" style="--accent:var(--plum-mid)">
+      <div class="exp-entry" id="exp-renault" tabindex="-1">
         <div class="exp-head">
           <img class="co-logo" src="images/renault-group.png" width="48" height="48" loading="lazy" alt="Renault Group">
           <div>
@@ -395,7 +396,7 @@
         </ul>
       </div>
 
-      <div class="exp-entry" id="exp-learning-assistant" tabindex="-1" style="--accent:var(--plum-deep)">
+      <div class="exp-entry" id="exp-learning-assistant" tabindex="-1">
         <div class="exp-head">
           <img class="co-logo" src="images/sabanci.png" width="680" height="286" loading="lazy" alt="Sabancı University">
           <div>
@@ -622,7 +623,7 @@
     <div class="view" data-view="volunteer" id="volunteer" tabindex="-1" role="region" aria-label="Volunteer">
       <div class="panel-head"><h1>Time given away</h1></div>
 
-      <div class="exp-entry" id="vol-makeawish" tabindex="-1" style="--accent:var(--mauve)">
+      <div class="exp-entry" id="vol-makeawish" tabindex="-1">
         <div class="exp-head">
           <img class="co-logo" src="images/makeawish.png" width="60" height="60" loading="lazy" alt="Make-A-Wish Türkiye">
           <div>
@@ -635,7 +636,7 @@
         </ul>
       </div>
 
-      <div class="exp-entry" id="vol-civic" tabindex="-1" style="--accent:var(--wisteria)">
+      <div class="exp-entry" id="vol-civic" tabindex="-1">
         <div class="exp-head">
           <img class="co-logo co-logo-round" src="images/cip.jpeg" width="100" height="100" loading="lazy" alt="Civic Involvement Projects">
           <div>
