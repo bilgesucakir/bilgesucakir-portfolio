@@ -8,7 +8,7 @@
 <meta property="og:title" content="Bilgesu Çakır Portfolio">
 <meta property="og:description" content="Software Development Engineer in Istanbul. Backend systems, side projects, and life off the clock.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#1e1a2c">
+<meta name="theme-color" content="#15131b">
 <script>
   (function(){
     let t=null;
@@ -23,14 +23,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* one purple, two jobs: --accent for text, links, buttons and borders (4.6:1 on paper);
-       --accent-soft for hover fills and the background glow */
-    --accent:#6a5c97;--accent-soft:#c8b6ff;
-    --ink:#2c2640;--ink-soft:#5b5478;--paper:#e9e2f8;--paper-dim:#ded4f1;
-    --line:rgba(106,92,151,.26);--on-accent-soft:#2c2640;--on-accent:#ffffff;--gh:#181717;
+    /* neutral base, one violet: --accent is the only strong colour (links, dates, buttons,
+       borders; 6:1 on paper), --accent-soft is its hover fill */
+    --accent:#6547c2;--accent-soft:#dcd1ff;
+    --ink:#1b1a22;--ink-soft:#5a5966;--paper:#efedf5;--paper-dim:#e4e0ee;
+    --line:rgba(27,26,34,.11);--on-accent-soft:#1b1a22;--on-accent:#ffffff;--gh:#181717;
     --thumb:rgba(136,124,175,.4);
     /* device screen (LCD) keeps its own ink — always dark-on-light, like a real display */
-    --device-ink:#2c2640;--device-ink-soft:#5b5478;--device-select:#6a5c97;
+    --device-ink:#2c2640;--device-ink-soft:#5b5478;
     /* device body — the silver/white classic; flips to the black classic in light mode for contrast */
     --device-body-a:#ffffff;--device-body-b:#e6e6ec;--device-body-border:rgba(20,18,30,.1);
     --device-bezel-border:rgba(20,18,30,.18);
@@ -38,14 +38,12 @@
     --device-center-a:#f7f7f9;--device-center-b:#d9d8de;
     --device-center-border:rgba(20,18,30,.06);--device-center-shadow:rgba(20,18,30,.12);
     --device-body-ink:#2c2640;--device-body-ink-soft:#5b5478;
-    /* corner glow — light and dark themes need opposite-direction shading to read against their own background */
-    --blob1:var(--accent-soft);--blob1-op:.22;--blob2:var(--accent-soft);--blob2-op:.16;
     --serif:'Fraunces',serif;--sans:'Sora',system-ui,sans-serif;
   }
   [data-theme="dark"]{color-scheme:dark;
-    --accent:#bdabee;
-    --ink:#ece8f8;--ink-soft:#a79dc4;--paper:#1e1a2c;--paper-dim:#2b2440;
-    --line:rgba(181,166,232,.24);--on-accent:#241f33;--gh:#ffffff;
+    --accent:#b6a0ff;--accent-soft:#cbbcff;
+    --ink:#ededf1;--ink-soft:#a2a2ad;--paper:#15131b;--paper-dim:#211e2a;
+    --line:rgba(237,237,241,.11);--on-accent:#17141f;--gh:#ffffff;
     --thumb:rgba(181,166,232,.3);
   }
   [data-theme="light"]{color-scheme:light;
@@ -55,7 +53,6 @@
     --device-center-a:#68606f;--device-center-b:#332f3a;
     --device-center-border:rgba(255,255,255,.22);--device-center-shadow:rgba(0,0,0,.4);
     --device-body-ink:#f1edfa;--device-body-ink-soft:#b6acd1;
-    --blob1:#544878;--blob1-op:.4;--blob2:#3f3560;--blob2-op:.36;
   }
   *{box-sizing:border-box}
   html{overflow-y:scroll;scrollbar-gutter:stable}
@@ -75,12 +72,6 @@
   .skip-link:focus-visible{transform:none;outline:2px solid var(--ink);outline-offset:2px}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
-  .ambient{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
-  .blob{position:absolute;border-radius:50%;filter:blur(90px)}
-  .b1{width:clamp(520px,34vw,900px);height:clamp(520px,34vw,900px);background:var(--blob1);
-    top:-15vw;left:-12vw;opacity:var(--blob1-op);transition:opacity .4s}
-  .b2{width:clamp(420px,28vw,760px);height:clamp(420px,28vw,760px);background:var(--blob2);
-    bottom:-15vw;right:-10vw;opacity:var(--blob2-op);transition:opacity .4s}
 
   .stage{display:grid;grid-template-columns:300px 1fr;gap:clamp(32px,6vw,80px);
     max-width:1180px;margin:0 auto;padding:clamp(32px,6vw,72px) clamp(20px,5vw,48px);align-items:start;height:100vh}
@@ -108,7 +99,8 @@
   .menu li{list-style:none}
   .menu li a{padding:6px 12px;font-size:.8rem;display:flex;justify-content:space-between;
     color:var(--device-ink);text-decoration:none;transition:background .15s,color .15s}
-  .menu li a[aria-current]{background:linear-gradient(180deg,#7c6ab0,var(--device-select));color:#fff}
+  .menu li a[aria-current]{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 88%,#fff),var(--accent));color:var(--on-accent)}
+  .menu li a[aria-current]:focus-visible{outline-color:currentColor}
   .menu li a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   .menu li a .arrow{opacity:.5;font-size:.7rem}
   .menu li a[aria-current] .arrow{opacity:.9}
@@ -141,8 +133,10 @@
     transition:color .4s;text-wrap:balance}
 
   /* ---- content panel ---- */
-  .panel{min-height:0;height:100%;overflow-y:auto;padding-right:12px;scrollbar-gutter:stable}
-  @media(max-width:860px){.panel{height:auto;overflow-y:visible;padding-right:0}}
+  /* 16px of inner room on the top and sides (pulled back with negative margins, so text doesn't move)
+     keeps the select highlight's soft edge from being clipped by the scroll box */
+  .panel{min-height:0;height:calc(100% + 16px);overflow-y:auto;padding:16px 16px 0;margin:-16px 0 0 -16px;scrollbar-gutter:stable}
+  @media(max-width:860px){.panel{height:auto;overflow-y:visible;padding:0;margin:0}}
   .panel-head{margin-bottom:26px}
   .about-body{display:flex;gap:26px;align-items:flex-start}
   .about-intro{flex:1;min-width:0}
@@ -162,14 +156,15 @@
   .project-group{margin-top:34px}
   .project-group:first-of-type{margin-top:0}
   .project-group>h2{font-size:1.35rem;margin:0 0 14px}
+  .project-group{border-radius:8px;transition:background .3s,box-shadow .3s}
+  .project-group:focus{outline:none}
+  .project-group{scroll-margin-top:16px}
+  .project-group.flash{--tint:color-mix(in srgb,var(--accent) 12%,transparent);background:var(--tint);box-shadow:0 0 0 14px var(--tint)}
   .project+.project{border-top:1px solid var(--line);margin-top:20px;padding-top:20px}
-  /* hobbies: short tiles, two per row on desktop; the long ones take a full row */
-  .hobby-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px 34px}
-  .hobby{border-top:1px solid var(--line);padding-top:16px}
-  .hobby.wide{grid-column:1/-1}
+  /* hobbies: one stacked list, heading above text like every other section */
+  .hobby+.hobby{border-top:1px solid var(--line);margin-top:22px;padding-top:22px}
   .hobby h2{margin:0 0 2px}
   .hobby p{margin-top:4px}
-  @media(max-width:860px){.hobby-grid{grid-template-columns:1fr}}
   .panel p{color:var(--ink-soft);max-width:58ch;margin:8px 0 0;font-size:.97rem}
   .panel .meta{font-size:.83rem;color:var(--accent);margin-top:2px}
   .panel ul.bullets{margin:10px 0 0;padding-left:1.1em;color:var(--ink-soft);font-size:.95rem}
@@ -185,6 +180,7 @@
   .co-logo{flex:0 0 auto;width:auto;height:36px;max-width:110px;object-fit:contain}
   /* this badge is a flat JPEG with a white square baked in — clip to the circle the ring already draws */
   .co-logo-round{width:36px;height:36px;border-radius:50%;object-fit:cover}
+  .exp-entry:focus{outline:none}
   .exp-entry.flash{background:color-mix(in srgb,var(--accent) 16%,transparent)}
   /* marks a detail that's still incoming (a year, a photo) without looking like a broken link */
   .tbd{font-style:italic;opacity:.68}
@@ -247,7 +243,6 @@
   <symbol id="live-mark" viewBox="0 0 512 512"><path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.4c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 20.9 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"/></symbol>
 </svg>
 <a class="skip-link" href="#panel" id="skipLink">Skip to content</a>
-<div class="ambient"><div class="blob b1"></div><div class="blob b2"></div></div>
 <div class="top-bar">
   <a class="icon-btn" href="https://github.com/bilgesucakir/bilgesucakir-portfolio" target="_blank" rel="noopener" aria-label="View this site's source on GitHub" title="Source on GitHub">
     <svg viewBox="0 0 16 16" aria-hidden="true"><use href="#gh-mark"/></svg>
@@ -439,7 +434,7 @@
 
     <div class="view" data-view="projects" id="projects" tabindex="-1" role="region" aria-label="Side projects">
       <div class="panel-head"><h1>What I build for fun</h1></div>
-      <section class="project-group" aria-label="Shipped">
+      <section class="project-group" id="proj-shipped" tabindex="-1" aria-label="Shipped">
         <h2>Shipped</h2>
         <div class="project">
         <h3>What We'll Watch Tonight</h3>
@@ -454,7 +449,7 @@
         <div class="doc-links tight"><a href="https://stitch-grapher.onrender.com" target="_blank" rel="noopener"><svg class="live-icon"><use href="#live-mark"/></svg>stitch-grapher.onrender.com</a><a href="https://github.com/bilgesucakir/stitch-grapher" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
         </div>
       </section>
-      <section class="project-group" aria-label="In progress">
+      <section class="project-group" id="proj-in-progress" tabindex="-1" aria-label="In progress">
         <h2>In progress</h2>
         <div class="project">
         <h3>Wingmark</h3>
@@ -485,7 +480,7 @@
         <div class="doc-links tight"><a href="https://github.com/bilgesucakir/account-singularity-extension" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
         </div>
       </section>
-      <section class="project-group" aria-label="Ideas">
+      <section class="project-group" id="proj-ideas" tabindex="-1" aria-label="Ideas">
         <h2>Ideas</h2>
         <div class="project">
         <h3>Jetlag Reset</h3>
@@ -555,8 +550,8 @@
     <div class="view" data-view="hobbies" id="hobbies" tabindex="-1" role="region" aria-label="Off the clock">
       <div class="panel-head"><h1>Beyond the code</h1></div>
 
-      <div class="hobby-grid">
-        <div class="hobby wide">
+      <div class="hobby-list">
+        <div class="hobby">
         <h2>Crochet</h2>
         <p>One of my passions. I make bags, plushies, clothing, scarves and berets, one project at a time. Documented (slowly) on Instagram</p>
         <div class="links">
@@ -580,7 +575,7 @@
         <h2>Flute</h2>
         <p>Classically trained on flute for almost ten years, with 20+ live performances, even one abroad. This is where I rest my soul.</p>
         </div>
-        <div class="hobby wide">
+        <div class="hobby">
         <h2>Travel</h2>
         <p>Love historical sightseeing. Countries visited so far:</p>
         <div class="chips">
@@ -681,7 +676,11 @@
       {label:'Sabancı · Learning Assistant',anchor:'exp-learning-assistant'}
     ]},
     {id:'tools',label:'Tools'},
-    {id:'projects',label:'Side projects'},
+    {id:'projects',label:'Side projects',children:[
+      {label:'Shipped',anchor:'proj-shipped'},
+      {label:'In progress',anchor:'proj-in-progress'},
+      {label:'Ideas',anchor:'proj-ideas'}
+    ]},
     {id:'volunteer',label:'Volunteer',children:[
       {label:'Make-A-Wish Türkiye',anchor:'vol-makeawish'},
       {label:'Civic Involvement',anchor:'vol-civic'}
@@ -718,7 +717,8 @@
   function highlightAnchor(id){
     const el=document.getElementById(id);
     if(!el) return;
-    el.scrollIntoView({behavior:reduceMotion.matches?'auto':'smooth',block:'center'});
+    const tall=el.offsetHeight>document.getElementById('panel').clientHeight*.7;
+    el.scrollIntoView({behavior:reduceMotion.matches?'auto':'smooth',block:tall?'start':'center'});
     el.classList.add('flash');
     setTimeout(()=>el.classList.remove('flash'),1200);
   }
@@ -853,7 +853,7 @@
   function applyTheme(t){
     document.documentElement.dataset.theme=t;
     themeBtn.textContent=t==='dark'?'☀ Light':'☾ Dark';
-    themeMeta.content=t==='dark'?'#1e1a2c':'#e9e2f8';
+    themeMeta.content=t==='dark'?'#15131b':'#efedf5';
   }
   applyTheme(document.documentElement.dataset.theme);
   themeBtn.onclick=()=>{
