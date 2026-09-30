@@ -32,7 +32,7 @@ It's a static site — publish the repo root as-is. On a host that asks for a
 
 ## Features
 
-- Light / dark theme toggle (top right) — the iPod flips between the silver and black
+- Light / dark theme toggle (top right), remembered between visits — the iPod flips between the silver and black
   classic finishes for contrast
 - Keyboard navigation (↑ ↓ to move, Enter to select)
 - Responsive down to mobile, where the layout stacks

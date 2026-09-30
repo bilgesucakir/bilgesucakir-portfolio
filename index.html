@@ -4,7 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bilgesu Çakır Portfolio</title>
+<meta name="description" content="Bilgesu Çakır — Software Development Engineer in Istanbul. Backend systems, side projects, and life off the clock, browsed on a click-wheel iPod.">
+<meta property="og:title" content="Bilgesu Çakır Portfolio">
+<meta property="og:description" content="Software Development Engineer in Istanbul. Backend systems, side projects, and life off the clock.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1e1a2c">
+<script>
+  try{ const t=localStorage.getItem('theme'); if(t==='light'||t==='dark') document.documentElement.dataset.theme=t; }catch(e){}
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23887caf'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='19' font-weight='700' fill='%23fdfbff' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -26,13 +36,13 @@
     --blob1:var(--mauve);--blob1-op:.22;--blob2:var(--wisteria-lt);--blob2-op:.18;
     --serif:'Fraunces',serif;--sans:'Sora',system-ui,sans-serif;
   }
-  [data-theme="dark"]{
+  [data-theme="dark"]{color-scheme:dark;
     --plum-deep:#bdabee;
     --ink:#ece8f8;--ink-soft:#a79dc4;--paper:#1e1a2c;--paper-dim:#2b2440;
     --line:rgba(181,166,232,.24);--on-plum:#241f33;--gh:#ffffff;
     --thumb:rgba(181,166,232,.3);
   }
-  [data-theme="light"]{
+  [data-theme="light"]{color-scheme:light;
     --device-body-a:#3c3944;--device-body-b:#131116;--device-body-border:rgba(255,255,255,.08);
     --device-bezel-border:rgba(255,255,255,.14);
     --device-wheel-a:#332f3a;--device-wheel-b:#151319;--device-wheel-hover:rgba(255,255,255,.22);--device-wheel-active:rgba(255,255,255,.4);
@@ -54,6 +64,9 @@
   a{color:var(--plum-deep)}
   button:focus-visible{outline:2px solid var(--plum-deep);outline-offset:3px}
   .view:focus{outline:none}
+  .skip-link{position:fixed;top:12px;left:12px;z-index:10;padding:8px 14px;border-radius:999px;font-size:.85rem;
+    background:var(--plum-deep);color:var(--on-plum);text-decoration:none;transform:translateY(-200%)}
+  .skip-link:focus-visible{transform:none;outline:2px solid var(--ink);outline-offset:2px}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
   .ambient{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
@@ -98,7 +111,8 @@
     background:radial-gradient(circle at 50% 35%,var(--device-wheel-a),var(--device-wheel-b));
     box-shadow:0 3px 10px rgba(44,38,64,.16),inset 0 1px 0 rgba(255,255,255,.4);border:1px solid var(--device-body-border)}
   .wheel button{position:absolute;background:none;border:none;cursor:pointer;color:var(--device-body-ink-soft);
-    font-size:.68rem;letter-spacing:.06em;padding:8px 12px;border-radius:10px;transition:color .2s,background .2s}
+    font-size:.68rem;letter-spacing:.06em;padding:8px 12px;border-radius:10px;transition:color .2s,background .2s;
+    touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   /* soft glow that fades toward the box edges, rather than a flat hard-edged fill.
      Excludes .center — it already has its own hover/active language (scale + shadow)
      below, and stacking this gradient on top of that made it look worse, not better. */
@@ -129,13 +143,13 @@
   .about-intro>p:first-child{margin-top:0}
   .edu-head{display:flex;gap:18px;align-items:center;margin-bottom:4px}
   .edu-head h2{margin:0}
-  .uni-logo{flex:0 0 auto;width:130px;border-radius:8px;display:block}
+  .uni-logo{flex:0 0 auto;width:130px;height:auto;border-radius:8px;display:block}
   @media(max-width:860px){.edu-head{flex-direction:column;align-items:flex-start;gap:12px}}
-  .portrait{flex:0 0 auto;width:164px;aspect-ratio:4/5;object-fit:cover;object-position:center 22%;
+  .portrait{flex:0 0 auto;width:164px;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:center 22%;
     border-radius:16px;border:1px solid var(--line)}
   @media(max-width:860px){.about-body{flex-direction:column;gap:20px}.portrait{width:150px}}
   .kicker{font-size:.78rem;color:var(--plum-deep);margin:0 0 6px}
-  .panel h1{font-family:var(--serif);font-weight:500;font-size:clamp(1.9rem,4.4vw,2.7rem);margin:0;line-height:1.12}
+  .panel h1{font-family:var(--serif);font-weight:500;font-size:clamp(1.9rem,4.4vw,2.7rem);margin:0;line-height:1.12;text-wrap:balance}
   .panel h2{font-family:var(--serif);font-weight:500;font-size:1.08rem;margin:22px 0 2px}
   .panel h2:first-of-type{margin-top:0}
   .panel p{color:var(--ink-soft);max-width:58ch;margin:8px 0 0;font-size:.97rem}
@@ -219,10 +233,11 @@
   <symbol id="gh-mark" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></symbol>
   <symbol id="live-mark" viewBox="0 0 512 512"><path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.4c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 20.9 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"/></symbol>
 </svg>
+<a class="skip-link" href="#panel" id="skipLink">Skip to content</a>
 <div class="ambient"><div class="blob b1"></div><div class="blob b2"></div></div>
 <div class="top-bar">
   <a class="icon-btn" href="https://github.com/bilgesucakir/bilgesucakir-portfolio" target="_blank" rel="noopener" aria-label="View this site's source on GitHub" title="Source on GitHub">
-    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    <svg viewBox="0 0 16 16" aria-hidden="true"><use href="#gh-mark"/></svg>
   </a>
   <button class="theme-toggle" id="themeBtn">☀ Light</button>
 </div>
@@ -253,7 +268,7 @@
     <div class="view on" data-view="about" id="about" tabindex="-1" role="region" aria-label="About">
       <div class="panel-head"><p class="kicker">Istanbul, Turkey</p><h1>Bilgesu Çakır</h1></div>
       <div class="about-body">
-        <img class="portrait" src="images/picture.jpeg" alt="Bilgesu Çakır">
+        <img class="portrait" src="images/picture.jpeg" width="500" height="532" alt="Bilgesu Çakır">
         <div class="about-intro">
           <p>Software Development Engineer. I build backend systems by day — currently at Hepsiburada, and spend my off hours shipping small side projects, crocheting, and hunting down the next film to watch.</p>
           <div class="links">
@@ -262,7 +277,7 @@
             <span>bilgesucakir@gmail.com</span>
             </a>
             <a href="https://github.com/bilgesucakir" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
-              <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><use href="#gh-mark"/></svg>
             <span>bilgesucakir</span>
             </a>
             <a href="https://www.linkedin.com/in/bilgesucakir/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
@@ -277,7 +292,7 @@
     <div class="view" data-view="education" id="education" tabindex="-1" role="region" aria-label="Education">
       <div class="panel-head"><p class="kicker">Education</p><h1>Where it started</h1></div>
       <div class="edu-head">
-        <img class="uni-logo" src="images/sabanci.png" alt="Sabancı Üniversitesi">
+        <img class="uni-logo" src="images/sabanci.png" width="680" height="286" loading="lazy" alt="Sabancı Üniversitesi">
         <div>
           <h2>B.S. Computer Science &amp; Engineering</h2>
           <p class="meta">Sabancı University · Graduated June 2023 · GPA 3.01/4.00</p>
@@ -302,7 +317,7 @@
 
       <div class="exp-entry" id="exp-hepsiburada" tabindex="-1" style="--accent:var(--mauve)">
         <div class="exp-head">
-          <img class="co-logo" src="images/hepsiburada.png" alt="Hepsiburada">
+          <img class="co-logo" src="images/hepsiburada.png" width="32" height="32" loading="lazy" alt="Hepsiburada">
           <div>
             <h2>Software Development Engineer</h2>
             <p class="meta">Hepsiburada, Istanbul · Aug 2026 - Current · <span class="duration-live" data-start="2026-08"></span></p>
@@ -319,7 +334,7 @@
 
       <div class="exp-entry" id="exp-amadeus" tabindex="-1" style="--accent:var(--wisteria)">
         <div class="exp-head">
-          <img class="co-logo" src="images/amadeus.png" alt="Amadeus">
+          <img class="co-logo" src="images/amadeus.png" width="180" height="180" loading="lazy" alt="Amadeus">
           <div>
             <h2>Software Development Engineer</h2>
             <p class="meta">Amadeus, Istanbul · Feb 2024 – Jun 2026 · 2 yrs 5 mo</p>
@@ -341,7 +356,7 @@
 
       <div class="exp-entry" id="exp-vodafone" tabindex="-1" style="--accent:var(--wisteria-lt)">
         <div class="exp-head">
-          <img class="co-logo" src="images/vodafone.png" alt="Vodafone">
+          <img class="co-logo" src="images/vodafone.png" width="180" height="180" loading="lazy" alt="Vodafone">
           <div>
             <h2>Long Term Intern</h2>
             <p class="meta">Vodafone, Istanbul · Feb 2023 – Jul 2023 · 6 months</p>
@@ -355,7 +370,7 @@
 
       <div class="exp-entry" id="exp-renault" tabindex="-1" style="--accent:var(--plum-mid)">
         <div class="exp-head">
-          <img class="co-logo" src="images/renault-group.png" alt="Renault Group">
+          <img class="co-logo" src="images/renault-group.png" width="48" height="48" loading="lazy" alt="Renault Group">
           <div>
             <h2>Information Systems Intern</h2>
             <p class="meta">Oyak-Renault, Bursa · Jul 2022 – Sep 2022 · 3 months</p>
@@ -370,7 +385,7 @@
 
       <div class="exp-entry" id="exp-learning-assistant" tabindex="-1" style="--accent:var(--plum-deep)">
         <div class="exp-head">
-          <img class="co-logo" src="images/sabanci.png" alt="Sabancı University">
+          <img class="co-logo" src="images/sabanci.png" width="680" height="286" loading="lazy" alt="Sabancı University">
           <div>
             <h2>Learning Assistant</h2>
             <p class="meta">Sabancı University, Istanbul · Oct 2021 – Jun 2022 · 9 months</p>
@@ -399,11 +414,11 @@
           Project report <span class="hint">PDF · 120 pages</span>
         </a>
         <a href="https://github.com/bilgesucakir/paho.mqtt.python-privacy-preserving-mqtt-messaging" target="_blank" rel="noopener">
-          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><use href="#gh-mark"/></svg>
           Client
         </a>
         <a href="https://github.com/burcutanis/amqt-broker" target="_blank" rel="noopener">
-          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><use href="#gh-mark"/></svg>
           Broker
         </a>
       </div>
@@ -432,7 +447,7 @@
       <div class="rule"></div>
       <h2>veni-vidi-emi</h2>
       <p class="meta">Spring Boot · Vue — early stage</p>
-      <p>"I came, I saw, I bought" — a map-based aggregator pulling secondhand listings from 2nd hand marketplaces, plotted by area.</p>
+      <p>“I came, I saw, I bought” — a map-based aggregator pulling secondhand listings from 2nd hand marketplaces, plotted by area.</p>
       <div class="doc-links tight"><a href="https://github.com/bilgesucakir/veni-vidi-emi" target="_blank" rel="noopener"><svg class="gh-icon"><use href="#gh-mark"/></svg>Code on GitHub</a></div>
       <div class="rule"></div>
       <h2>Shaker</h2>
@@ -460,49 +475,49 @@
       <div class="panel-head"><p class="kicker">Tools</p><h1>What I build with</h1></div>
       <h2>Languages</h2>
       <div class="chips">
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="">Java</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="">Python</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg" alt="">C</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" alt="">C++</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg" alt="">C#</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg" alt="">Dart</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="">TypeScript</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="">JavaScript</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="">HTML</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" alt="">CSS</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" width="18" height="18" loading="lazy" alt="">Java</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" width="18" height="18" loading="lazy" alt="">Python</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg" width="18" height="18" loading="lazy" alt="">C</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" width="18" height="18" loading="lazy" alt="">C++</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg" width="18" height="18" loading="lazy" alt="">C#</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg" width="18" height="18" loading="lazy" alt="">Dart</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" width="18" height="18" loading="lazy" alt="">TypeScript</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" width="18" height="18" loading="lazy" alt="">JavaScript</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" width="18" height="18" loading="lazy" alt="">HTML</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" width="18" height="18" loading="lazy" alt="">CSS</span>
       </div>
       <h2>Frameworks &amp; platforms</h2>
       <div class="chips">
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/spring/spring-original.svg" alt="">Spring Boot</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/quarkus/quarkus-original.svg" alt="">Quarkus</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/hibernate/hibernate-original.svg" alt="">Hibernate / JPA</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg" alt="">Kubernetes</span>
-        <span class="chip"><img class="mono" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apachekafka/apachekafka-original.svg" alt="">Kafka</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/rabbitmq/rabbitmq-original.svg" alt="">RabbitMQ</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dot-net/dot-net-original.svg" alt="">.NET</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg" alt="">Vue.js</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/angular/angular-original.svg" alt="">Angular</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" alt="">Flutter</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="">Node.js</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/spring/spring-original.svg" width="18" height="18" loading="lazy" alt="">Spring Boot</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/quarkus/quarkus-original.svg" width="18" height="18" loading="lazy" alt="">Quarkus</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/hibernate/hibernate-original.svg" width="18" height="18" loading="lazy" alt="">Hibernate / JPA</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg" width="18" height="18" loading="lazy" alt="">Kubernetes</span>
+        <span class="chip"><img class="mono" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apachekafka/apachekafka-original.svg" width="18" height="18" loading="lazy" alt="">Kafka</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/rabbitmq/rabbitmq-original.svg" width="18" height="18" loading="lazy" alt="">RabbitMQ</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dot-net/dot-net-original.svg" width="18" height="18" loading="lazy" alt="">.NET</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg" width="18" height="18" loading="lazy" alt="">Vue.js</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/angular/angular-original.svg" width="18" height="18" loading="lazy" alt="">Angular</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" width="18" height="18" loading="lazy" alt="">Flutter</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" width="18" height="18" loading="lazy" alt="">Node.js</span>
       </div>
       <h2>Databases</h2>
       <div class="chips">
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" alt="">MySQL</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" alt="">PostgreSQL</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" alt="">MongoDB</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" width="18" height="18" loading="lazy" alt="">MySQL</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" width="18" height="18" loading="lazy" alt="">PostgreSQL</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" width="18" height="18" loading="lazy" alt="">MongoDB</span>
       </div>
       <h2>Tooling</h2>
       <div class="chips">
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/maven/maven-original.svg" alt="">Maven</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/junit/junit-original.svg" alt="">JUnit</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="">Git</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="">Docker</span>
-        <span class="chip"><img class="mono" src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/redhatopenshift.svg" alt="">OpenShift</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jira/jira-original.svg" alt="">Jira</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="">Jenkins</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sonarqube/sonarqube-original.svg" alt="">SonarQube</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg" alt="">Postman</span>
-        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/grafana/grafana-original.svg" alt="">Grafana</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/maven/maven-original.svg" width="18" height="18" loading="lazy" alt="">Maven</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/junit/junit-original.svg" width="18" height="18" loading="lazy" alt="">JUnit</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" width="18" height="18" loading="lazy" alt="">Git</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" width="18" height="18" loading="lazy" alt="">Docker</span>
+        <span class="chip"><img class="mono" src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/redhatopenshift.svg" width="18" height="18" loading="lazy" alt="">OpenShift</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jira/jira-original.svg" width="18" height="18" loading="lazy" alt="">Jira</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" width="18" height="18" loading="lazy" alt="">Jenkins</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sonarqube/sonarqube-original.svg" width="18" height="18" loading="lazy" alt="">SonarQube</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg" width="18" height="18" loading="lazy" alt="">Postman</span>
+        <span class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/grafana/grafana-original.svg" width="18" height="18" loading="lazy" alt="">Grafana</span>
       </div>
     </div>
 
@@ -536,13 +551,13 @@
       <h2>Travel</h2>
       <p>Love historical sightseeing. Countries visited so far:</p>
       <div class="chips">
-        <span class="chip" title="Germany"><img class="flag" src="images/flags/de.png" alt="Germany">Frankfurt</span>
-        <span class="chip" title="Austria"><img class="flag" src="images/flags/at.png" alt="Austria">Vienna</span>
-        <span class="chip" title="Bulgaria"><img class="flag" src="images/flags/bg.png" alt="Bulgaria">Sofia, Plovdiv, Stara Zagora</span>
-        <span class="chip" title="France"><img class="flag" src="images/flags/fr.png" alt="France">Paris</span>
-        <span class="chip" title="Italy"><img class="flag" src="images/flags/it.png" alt="Italy">Rome</span>
-        <span class="chip" title="Hungary"><img class="flag" src="images/flags/hu.png" alt="Hungary">Budapest</span>
-        <span class="chip" title="Greece"><img class="flag" src="images/flags/gr.png" alt="Greece">Athens, Chios</span>
+        <span class="chip" title="Germany"><img class="flag" src="images/flags/de.png" width="21" height="14" loading="lazy" alt="Germany">Frankfurt</span>
+        <span class="chip" title="Austria"><img class="flag" src="images/flags/at.png" width="21" height="14" loading="lazy" alt="Austria">Vienna</span>
+        <span class="chip" title="Bulgaria"><img class="flag" src="images/flags/bg.png" width="21" height="14" loading="lazy" alt="Bulgaria">Sofia, Plovdiv, Stara Zagora</span>
+        <span class="chip" title="France"><img class="flag" src="images/flags/fr.png" width="21" height="14" loading="lazy" alt="France">Paris</span>
+        <span class="chip" title="Italy"><img class="flag" src="images/flags/it.png" width="21" height="14" loading="lazy" alt="Italy">Rome</span>
+        <span class="chip" title="Hungary"><img class="flag" src="images/flags/hu.png" width="21" height="14" loading="lazy" alt="Hungary">Budapest</span>
+        <span class="chip" title="Greece"><img class="flag" src="images/flags/gr.png" width="21" height="14" loading="lazy" alt="Greece">Athens, Chios</span>
       </div>
       <div class="rule"></div>
 
@@ -575,7 +590,7 @@
 
       <div class="exp-entry" id="vol-makeawish" tabindex="-1" style="--accent:var(--mauve)">
         <div class="exp-head">
-          <img class="co-logo" src="images/makeawish.png" alt="Make-A-Wish Türkiye">
+          <img class="co-logo" src="images/makeawish.png" width="60" height="60" loading="lazy" alt="Make-A-Wish Türkiye">
           <div>
             <h2>Make-A-Wish Türkiye</h2>
             <p class="meta">Volunteer · Jul 2026 - current · <span class="duration-live" data-start="2026-07"></span></p>
@@ -588,7 +603,7 @@
 
       <div class="exp-entry" id="vol-civic" tabindex="-1" style="--accent:var(--wisteria)">
         <div class="exp-head">
-          <img class="co-logo co-logo-round" src="images/cip.jpeg" alt="Civic Involvement Projects">
+          <img class="co-logo co-logo-round" src="images/cip.jpeg" width="100" height="100" loading="lazy" alt="Civic Involvement Projects">
           <div>
             <h2>Civic Involvement Projects</h2>
             <p class="meta">Sabancı University · Volunteer · Sep 2019 – Jan 2020 · 5 months</p>
@@ -645,6 +660,7 @@
   const nav=document.querySelector('nav.menu');
   const wheel=document.querySelector('.wheel');
   const srStatus=document.getElementById('srStatus');
+  const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
 
   function items(){ return level==='root' ? tracks : level.items; }
 
@@ -665,7 +681,7 @@
   function highlightAnchor(id){
     const el=document.getElementById(id);
     if(!el) return;
-    el.scrollIntoView({behavior:'smooth',block:'center'});
+    el.scrollIntoView({behavior:reduceMotion.matches?'auto':'smooth',block:'center'});
     el.classList.add('flash');
     setTimeout(()=>el.classList.remove('flash'),1200);
   }
@@ -774,16 +790,28 @@
     else if(e.key==='Enter'&&document.activeElement===document.body){enter()}
   });
 
+  document.getElementById('skipLink').onclick=e=>{
+    e.preventDefault();
+    const v=document.querySelector('.view.on'); if(v) v.focus();
+  };
+
   renderMenu();
   const initial=resolveHash(decodeURIComponent(location.hash.slice(1)));
   if(initial){ applyRoute(initial); }
   else { showView(0); if(location.hash) history.replaceState(null,'',location.pathname+location.search); }
 
   const themeBtn=document.getElementById('themeBtn');
+  const themeMeta=document.querySelector('meta[name="theme-color"]');
+  function applyTheme(t){
+    document.documentElement.dataset.theme=t;
+    themeBtn.textContent=t==='dark'?'☀ Light':'☾ Dark';
+    themeMeta.content=t==='dark'?'#1e1a2c':'#e9e2f8';
+  }
+  applyTheme(document.documentElement.dataset.theme);
   themeBtn.onclick=()=>{
-    const dark=document.documentElement.dataset.theme==='dark';
-    document.documentElement.dataset.theme=dark?'light':'dark';
-    themeBtn.textContent=dark?'☾ Dark':'☀ Light';
+    const t=document.documentElement.dataset.theme==='dark'?'light':'dark';
+    applyTheme(t);
+    try{ localStorage.setItem('theme',t); }catch(e){}
   };
 </script>
 </body>
