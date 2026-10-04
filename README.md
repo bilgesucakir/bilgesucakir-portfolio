@@ -1,7 +1,7 @@
 # bilgesucakir-portfolio
 
 Personal portfolio for Bilgesu Çakır, built as an interactive click-wheel iPod. Browse the
-menu with the wheel (or the arrow keys); "Experience" and "Volunteer" drill into sub-menus.
+menu with the wheel (or the arrow keys).
 
 ## Stack
 
