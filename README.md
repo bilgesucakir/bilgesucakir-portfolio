@@ -29,11 +29,3 @@ python3 -m http.server
 
 It's a static site — publish the repo root as-is. On a host that asks for a
 **publish directory**, use `.`; leave the build command empty.
-
-## Features
-
-- Light / dark theme that follows the device on first visit; the toggle (top right) is remembered — the iPod flips between the silver and black
-  classic finishes for contrast
-- Keyboard navigation (↑ ↓ to move, Enter to select)
-- Responsive down to mobile, where the layout stacks
-- `prefers-reduced-motion` respected
