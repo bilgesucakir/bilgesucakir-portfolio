@@ -6,15 +6,14 @@ menu with the wheel (or the arrow keys).
 ## Stack
 
 Single static `index.html` — no build step, no dependencies to install. Vanilla HTML, CSS
-and JavaScript, all inline. Two web fonts load from Google Fonts and tech-stack logos load
-from the [devicon](https://github.com/devicons/devicon) CDN; everything else is local.
+and JavaScript, all inline.
 
 ## Layout
 
 ```
 index.html          the whole site
 images/             used images in the site
-files/              mqtt-report.pdf (graduation project report)
+files/              used files in the site
 ```
 
 ## Running locally
